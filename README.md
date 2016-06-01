@@ -1,2 +1,2 @@
 # ManejodeMemoriaVirtual
-Proyecto 3 Sistemas Operativos
+Proyecto 3 de Sistemas Operativos
