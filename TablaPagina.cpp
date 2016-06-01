@@ -9,12 +9,13 @@
   //v=0 y r=0 sin nmp definido
   TablaPagina::TablaPagina(int cantidad)
   {
-  //  entrada = new EntradaTP[cantidad];
+    tamano=cantidad;
+   entrada = new EntradaTP[cantidad];
     int k=0;
     for(k=0; k<cantidad; k++){
       EntradaTP *nueva = new EntradaTP();
       //entrada[k] = nueva;
-      entrada->push_back(nueva);
+      //entrada->push_back(nueva);
       printf("V:%c\n",nueva->V);
     }
     
@@ -88,7 +89,7 @@ int TablaPagina:: referenciado(int npv)
 
    EntradaTP TablaPagina::get_entrada(int posicion){
 
-      if(posicion<entrada->size())
+      if(posicion<tamano)
         //entrada[posicion].set_V(1);
 
        return entrada[posicion];
