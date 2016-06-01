@@ -50,7 +50,7 @@ void buscar_en_TLB_de_instrucciones(unsigned int direccion_virtual)
 		//primero debemos analizar el valor del bit valido
 		if (TLB_instrucciones[i].npv == get_pagina_virtual(direccion_virtual) && TLB_instrucciones[i].V == 1)
 		{
-		// TODO: Comparar entrada i-ésima con la página asociada a la direccion virtual dada
+		/* TODO: Comparar entrada i-ésima con la página asociada a la direccion virtual dada 
 			TLB_instrucciones[i].R = 1;
 			// TODO: marcar bit referencia
 			return;
@@ -169,12 +169,12 @@ FILE* archivo_trace = fopen(argv[1], "r");
 	}
 
 
-printf("Tamaño entrada tlb: %lu\n",sizeof(EntradaTLB));
-printf("Tamaño entrada tp: %lu\n",sizeof(EntradaTP));
+printf("Tamaño entrada tlb: %d\n",sizeof(EntradaTLB));
+printf("Tamaño entrada tp: %d\n",sizeof(EntradaTP));
 
 	printf("Memoria física en MB: %u\n", cantidad_memoria_fisica_en_MB);
 	printf("Tamaño de página en KB: %u\n", tamanio_pagina_en_KB);
-	printf("Entradas de la tabla de página (cantidad de páginas virtuales): %u\n", entradas_tabla_de_pagina);
+	printf("Entradas de la tabla de página (cantidad de páginas virtuales): %Lu\n", entradas_tabla_de_pagina);
 	printf("Cantidad de marcos de página: %u\n", cantidad_marcos_de_pagina);
 	printf("Número de marcos de página: %u\n", bits_npv);
 	printf("Bits para offset: %u\n", bits_offset);

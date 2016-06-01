@@ -16,8 +16,8 @@
 class EntradaTP : public Entrada
 {
 public:
-  unsigned char V;
-	unsigned char R;
+  unsigned int V;
+	unsigned int R;
 	unsigned int Nmp;
   
 
