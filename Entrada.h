@@ -15,8 +15,8 @@ class Entrada {
 public:
   char V;
   char R;
-  virtual void set_V(char v) = 0;
-  virtual void set_R(char v) = 0;
+  virtual void set_V(int  v) = 0;
+  virtual void set_R(int  v) = 0;
   virtual void set_Nmp(unsigned int v) = 0;
   virtual void set_Npv(unsigned int v) = 0;
 };

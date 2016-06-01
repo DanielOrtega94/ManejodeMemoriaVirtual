@@ -10,6 +10,10 @@
 
 
 
+extern unsigned int get_pagina_virtual(unsigned int direccion_virtual);
+
+
+
 using namespace std;
 
 class TablaPagina : public Tabla
@@ -24,9 +28,14 @@ class TablaPagina : public Tabla
   //construcctor dado por defecto
   TablaPagina();
   int LRU(int direccion_virtual);
-  int at(int posicion);
+  EntradaTP* at(int posicion);
   void buscar_npv(unsigned int direccion_virtual);
   EntradaTP get_entrada(int posicion);
+
+//se refiere al caso  V=1 y R=1 
+  bool primer_caso(int npv);
+  //se refiere al caso V=0
+  bool segundo_caso(int npv);
 
 };
 

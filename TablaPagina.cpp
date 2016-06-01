@@ -23,11 +23,37 @@
   int TablaPagina::LRU(int direccion_virtual)
   {
 
+    int nro_pagina=get_pagina_virtual(direccion_virtual);
+    
+  if(entrada[nro_pagina].V ==1 && entrada[nro_pagina].R == 0){
+
+    entrada[nro_pagina].R=1;
+    //copiar entradaTP y npv en la TLB
+    //respaldar en la posicion libre
+}
+
+  else if(entrada[nro_pagina].V ==1 && entrada[nro_pagina].R == 1){
+//respaldar en la poscion menor recientemente usada
+
+
+    }
+
+    else if(entrada[nro_pagina].V == 0 ){
+//si hay MP disponibles, copiamos el nmp, copiar el nmp a la entrada de la TP
+// y V=1 y R=1
+
+//no hay MP disponibles, aplicamos LRU a la TP  y le quitamos el MP
+//y V=1 y R=1, despues copiamos  la entrada en la TLB menos recientemente usada
+
+
+
+    }
+
     return 0;
   }
 
 
-  int TablaPagina::at(int posicion)
+  EntradaTP* TablaPagina::at(int posicion)
   {
   	return 0;
   }
@@ -73,11 +99,19 @@
    EntradaTP TablaPagina::get_entrada(int posicion){
 
       if(posicion<tamano)
-<<<<<<< HEAD
-       
-=======
 
->>>>>>> c2908d14f78daa058457d9697570eab363e57675
        return entrada[posicion];
-    
+    else 
+      throw -1;
    }
+
+
+// este me todo actualiza R
+bool TablaPagina::primer_caso(int npv){
+  entrada[npv].R=1;
+
+}
+//metodo debe busar un marco libre
+bool TablaPagina::segundo_caso(int npv){
+  
+}

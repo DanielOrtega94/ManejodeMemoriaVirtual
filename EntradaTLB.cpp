@@ -1,6 +1,5 @@
 #include "EntradaTLB.h"
 
-//asdkfhaskdhfjasdn
  EntradaTLB::EntradaTLB(int nmp, int npv)
   {
     V = 1;
@@ -14,11 +13,11 @@
     R = 0;
 }
 
-  void EntradaTLB::set_V(char v)
+  void EntradaTLB::set_V(int v)
   {
     V=v;
   }
-  void EntradaTLB::set_R(char v)
+  void EntradaTLB::set_R(int v)
   {
     R=v;
   }

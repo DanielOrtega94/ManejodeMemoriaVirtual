@@ -3,6 +3,7 @@
 
 EntradaTP::EntradaTP()
   {
+  //debe ser 1, ya que no considemoras el caso donde se invalide la entradas
     V = 0;	
     R = 0;
   }
@@ -13,11 +14,11 @@ EntradaTP::EntradaTP()
     R = 1;
     Nmp = nmp;
   }
-  void EntradaTP::set_V(char v)
+  void EntradaTP::set_V(int v)
   {
     V=v;
   }
-  void EntradaTP::set_R(char v)
+  void EntradaTP::set_R(int v)
   {
     R=v;
   }
@@ -28,6 +29,6 @@ EntradaTP::EntradaTP()
   // Este metodo no deberia estar aqui..
  void EntradaTP::set_Npv(unsigned int v)
   {
-    cout << "no puede setear Nmp, porque es una entrada en TP" <<endl;
+        exit(EXIT_FAILURE);
   }
  

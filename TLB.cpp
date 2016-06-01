@@ -1,11 +1,11 @@
 #include "TLB.h"
 #define ENTRADAS_TLB 4
-
+#define SUCCESS 1
 
 
  TLB ::TLB(int  entradas_tp)
   {
-     entradas_tabla_de_pagina=entradas_tp;
+    //entradas_tabla_de_pagina=entradas_tp;
     entradas = new EntradaTLB[ENTRADAS_TLB];
     int j=0;
     for(j=0;j<ENTRADAS_TLB;j++)
@@ -17,35 +17,71 @@
   {
 
 
-  void nro_pagina=get_pagina_virtual(direccion_virtual);
+    int nro_pagina=get_pagina_virtual(direccion_virtual);
 
   //si cae en algun caso deberiamos romper el for
-    for(int i =0; i <ENTRADAS_TLB;i++){
-
-
-//caso A
-    if(nro_pagina == entradas[i].Npv && entradas[i].V==1){
-        entradas[i].set_R(1);
-        tabla_pagina->get_entrada(nro_pagina).set_R(1);
-        tabla_pagina->get_entrada(nro_pagina).set_V(1);
-
-    //    tabla_pagina[nro_pagina].referenciado(1);
-        return
-    }
-
-//Caso B
-if(entradas[i].V==1){
-  //tabla_pagina[nro_pagina].set_R(1);
- //  tabla_pagina[nro_pagina].set_V(1);
  
-    //break;
-}
 
-    }
+//Caso A 
+      //diciendo q fue exitoso
+      if (primer_caso(nro_pagina)) return SUCCESS;
+
+//Caso C
+//Debemos reemplazar un entrada de la Tp la entradas menos reciente
+//debemos reemplazar en tablapagina
+
+
+   
     return 0;
   }
 
-  int TLB ::at(int posicion)
+  bool TLB::segundo_caso(int nro_pagina){
+
+
+
+    for(int i =0; i <ENTRADAS_TLB;i++){
+     if(entradas[i].V==0){
+
+      EntradaTP aux = tabla_pagina->get_entrada(nro_pagina);
+
+
+// caso cuando v=1, 
+      if(aux.V==1){
+
+    entradas[i].Nmp=aux.Nmp;
+    aux.set_R(nro_pagina);
+    entradas[i].V = 1;
+    entradas[i].R = 1;
+    entradas[i].Npv=nro_pagina;
+      }
+
+
+
+      //
+     }
+   }
+ }
+
+
+
+  bool TLB::primer_caso(int nro_pagina){
+  
+    for(int i =0; i <ENTRADAS_TLB;i++){
+
+     if(nro_pagina == entradas[i].Npv && entradas[i].V==1){
+
+        entradas[i].set_R(1);
+        tabla_pagina->get_entrada(nro_pagina).set_R(1);
+        tabla_pagina->get_entrada(nro_pagina).set_V(1);
+        return true;
+    }
+  }
+    return false;
+  }
+
+
+
+  EntradaTLB* TLB ::at(int posicion)
   { 
 
 
@@ -54,11 +90,11 @@ if(entradas[i].V==1){
 
   //si es 0 es un miss y debe buscar
   // si es un hit retorna un 1
-  int TLB ::buscar_direccion(int npv)
+  void TLB ::buscar_direccion(int npv)
   {
 
     if(entradas->V == 0){
-       for(int i =0; i< entradas_tabla_de_pagina;i++){
+     //  for(int i =0; i< entradas_tabla_de_pagina;i++){
      //  if(npv==entradas[i]){
      /*	no match for ‘operator==’ (operand types are ‘int’ and ‘Entrada’)
         if(npv==entradas[i]){*/
@@ -67,7 +103,7 @@ if(entradas[i].V==1){
       // }
     }
   }
-    }
+    
 
  void TLB ::set_tp(TablaPagina *tabla){
 

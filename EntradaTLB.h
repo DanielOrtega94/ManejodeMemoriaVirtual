@@ -17,10 +17,10 @@ public:
 
   EntradaTLB(int nmp, int npv);
   EntradaTLB();
-  void set_V(char v);
+  void set_V(int v);
   void set_Npv(unsigned int v);
   void set_Nmp(unsigned int v);
-  void set_R(char v);
+  void set_R(int  v);
 };
 
 #endif
