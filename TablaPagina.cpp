@@ -2,34 +2,33 @@
 
 
   TablaPagina::TablaPagina(){
-
+    
   }
-
+  
   // crea la tabla de pagina y agrega entradas por defecto
   //v=0 y r=0 sin nmp definido
   TablaPagina::TablaPagina(int cantidad)
   {
-    tamano=cantidad;
+   tamano=cantidad;
    entrada = new EntradaTP[cantidad];
     int k=0;
     for(k=0; k<cantidad; k++){
       entrada[k] = EntradaTP();
-      //entrada->push_back(nueva);
-      printf("V:%d\n",entrada[k].V);
+       
     }
-
+    
   }
 
 
   int TablaPagina::LRU(int direccion_virtual)
   {
-
+  
     return 0;
   }
-
+  
 
   int TablaPagina::at(int posicion)
-  {
+  { 
   	return 0;
   }
 
@@ -44,7 +43,7 @@
     //buscar sitio en tlb, y copiar en ella
     //necesitamos la funcion q nos copie en TLB
     // TODO: buscar marco libre
-    //
+    // 
   //}
 
   //else{
@@ -54,9 +53,9 @@
       puntero_mp++;
       //resto 1 por el ++ anterior
       algoritmo_LRU(numero_pagina_virtual, puntero_mp-1);
-
+      
       //marcos_libres
-    //debemos elegir un marco libre, asignarlo a la entrada y marcar el bit de validez como valido y
+    //debemos elegir un marco libre, asignarlo a la entrada y marcar el bit de validez como valido y 
     //referencia como valido. Ademas actalizar la TLB con ese marco.
 
     }
@@ -67,31 +66,14 @@
       //asignar el marco, cambiar V y R, y actualizar la TLB
 
     }
-    //buscamos
+    //buscamos 
   }*/
 }
-/*
-
-int TablaPagina:: valido(int npv)
-{
-
-  return entrada[npv].V;
-
-}
-
-int TablaPagina:: referenciado(int npv)
-{
-
-  return entrada[npv].R;
-
-}*/
 
    EntradaTP TablaPagina::get_entrada(int posicion){
 
       if(posicion<tamano)
-        //entrada[posicion].set_V(1);
-
+       
        return entrada[posicion];
-     // else
-      //  return NULL;
+    
    }

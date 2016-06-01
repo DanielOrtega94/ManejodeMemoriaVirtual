@@ -7,6 +7,9 @@
   {
      entradas_tabla_de_pagina=entradas_tp;
     entradas = new EntradaTLB[ENTRADAS_TLB];
+    int j=0;
+    for(j=0;j<ENTRADAS_TLB;j++)
+      entradas[j]=EntradaTLB();
   }
 
 
@@ -23,6 +26,9 @@
 //caso A
     if(nro_pagina == entradas[i].Npv && entradas[i].V==1){
         entradas[i].set_R(1);
+        tabla_pagina->get_entrada(nro_pagina).set_R(1);
+        tabla_pagina->get_entrada(nro_pagina).set_V(1);
+
     //    tabla_pagina[nro_pagina].referenciado(1);
         //break;
     }
@@ -31,8 +37,7 @@
 if(entradas[i].V==1){
   //tabla_pagina[nro_pagina].set_R(1);
  //  tabla_pagina[nro_pagina].set_V(1);
-  //tabla_pagina[nro_pagina].valido(1);
-    //tabla_pagina[nro_pagina].referenciado(1);
+ 
     //break;
 }
     
@@ -42,8 +47,6 @@ if(entradas[i].V==1){
   
   int TLB ::at(int posicion)
   { 
-
-
 
   	return 0;
   }
