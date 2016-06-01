@@ -25,7 +25,7 @@ class TLB : public Tabla {
   
   int LRU(int direccion_virtual);
   int at(int posicion);
-  int buscar_direccion(int npv);
+  void buscar_direccion(int npv);
   void buscar_npv(unsigned int direccion_virtual);
   void set_tp(TablaPagina *tabla);
  

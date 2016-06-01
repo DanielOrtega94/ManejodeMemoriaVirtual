@@ -17,7 +17,7 @@
   {
 
 
-  unsigned int nro_pagina=get_pagina_virtual(direccion_virtual);
+  void nro_pagina=get_pagina_virtual(direccion_virtual);
 
   //si cae en algun caso deberiamos romper el for
     for(int i =0; i <ENTRADAS_TLB;i++){
@@ -30,7 +30,7 @@
         tabla_pagina->get_entrada(nro_pagina).set_V(1);
 
     //    tabla_pagina[nro_pagina].referenciado(1);
-        //break;
+        return
     }
 
 //Caso B
