@@ -38,7 +38,7 @@
 {/*
   //boramos argumento tipo de direccion, la idea era definir si era dato o instruccion
   //unsigned int numero_pagina_virtual = get_pagina_virtual(direccion_virtual);
-  //if (tabla_de_pagina[numero_pagina_virtual].V == 1)/*TODO: testear si bit valido es 0
+  //if (tabla_de_pagina[numero_pagina_virtual].V == 1)// TODO: testear si bit valido es 0
   //{
     //tabla_de_pagina[numero_pagina_virtual].R = 1;
     //buscar sitio en tlb, y copiar en ella
