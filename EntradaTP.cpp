@@ -3,8 +3,8 @@
 
 EntradaTP::EntradaTP()
   {
-    V = 0;	
-    R = 0;
+    V = '0';	
+    R = '0';
   }
 
   EntradaTP::EntradaTP(int nmp)
