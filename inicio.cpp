@@ -50,7 +50,7 @@ void buscar_en_TLB_de_instrucciones(unsigned int direccion_virtual)
 		//primero debemos analizar el valor del bit valido
 		if (TLB_instrucciones[i].npv == get_pagina_virtual(direccion_virtual) && TLB_instrucciones[i].V == 1)
 		{
-		/* TODO: Comparar entrada i-ésima con la página asociada a la direccion virtual dada
+		// TODO: Comparar entrada i-ésima con la página asociada a la direccion virtual dada
 			TLB_instrucciones[i].R = 1;
 			// TODO: marcar bit referencia
 			return;
@@ -163,8 +163,10 @@ FILE* archivo_trace = fopen(argv[1], "r");
     TLB_instrucciones->set_tp(tabla_de_pagina);
     TLB_datos->set_tp(tabla_de_pagina);
 //seteamos todos los marcos de pagina como disponible en un principio
-	for(int i =0;i<cantidad_marcos_de_pagina;i++)
+	for(unsigned int i =0;i<cantidad_marcos_de_pagina;i++)
+	{
 		marcos_libres[i]=1;
+	}
 
 
 printf("Tamaño entrada tlb: %lu\n",sizeof(EntradaTLB));
