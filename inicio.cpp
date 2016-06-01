@@ -50,7 +50,7 @@ void buscar_en_TLB_de_instrucciones(unsigned int direccion_virtual)
 		//primero debemos analizar el valor del bit valido
 		if (TLB_instrucciones[i].npv == get_pagina_virtual(direccion_virtual) && TLB_instrucciones[i].V == 1)
 		{
-		/* TODO: Comparar entrada i-ésima con la página asociada a la direccion virtual dada 
+		// TODO: Comparar entrada i-ésima con la página asociada a la direccion virtual dada
 			TLB_instrucciones[i].R = 1;
 			// TODO: marcar bit referencia
 			return;
@@ -61,7 +61,7 @@ void buscar_en_TLB_de_instrucciones(unsigned int direccion_virtual)
 		if(marcos_disponibles>0){
 			marcos_disponibles--;
 			//marcos_libres
-		//debemos elegir un marco libre, asignarlo a la entrada y marcar el bit de validez como valido y 
+		//debemos elegir un marco libre, asignarlo a la entrada y marcar el bit de validez como valido y
 		//referencia como valido. Ademas actalizar la TLB con ese marco.
 
 		}
@@ -71,7 +71,7 @@ void buscar_en_TLB_de_instrucciones(unsigned int direccion_virtual)
 			//asignar el marco, cambiar V y R, y actualizar la TLB
 
 		}
-		//buscamos 
+		//buscamos
 	}
 	// Si se llega a este punto, la dirección virtual no se encuentra en la TLB
 	// Hay que buscarla en la tabla de página.
@@ -81,7 +81,7 @@ void buscar_en_TLB_de_instrucciones(unsigned int direccion_virtual)
 	}
 */
 }
-	
+
 
 unsigned long long int calcular_marcos_de_pagina()
 {
@@ -125,7 +125,7 @@ unsigned int get_pagina_virtual(unsigned int direccion_virtual)
 
 
 
-int main(int argc, char const *argv[]) 
+int main(int argc, char const *argv[])
 	{
 
 
@@ -151,10 +151,10 @@ FILE* archivo_trace = fopen(argv[1], "r");
 	bits_mp = calcular_bits_marco_pagina();
 	entradas_tabla_de_pagina = 1 << (bits_npv);
 	marcos_disponibles=cantidad_marcos_de_pagina;
-	
+
 	// crea los objetos necesarios para emular la tarea
   TLB_instrucciones = new TLB(entradas_tabla_de_pagina);
-  TLB_datos = new TLB(entradas_tabla_de_pagina);  
+  TLB_datos = new TLB(entradas_tabla_de_pagina);
   EntradaTLB *etlb= new EntradaTLB();
   EntradaTP *tp= new EntradaTP();
   TablaPagina* tabla_de_pagina = new TablaPagina(entradas_tabla_de_pagina);
@@ -163,20 +163,18 @@ FILE* archivo_trace = fopen(argv[1], "r");
     TLB_instrucciones->set_tp(tabla_de_pagina);
     TLB_datos->set_tp(tabla_de_pagina);
 //seteamos todos los marcos de pagina como disponible en un principio
-	for(int i =0;i<cantidad_marcos_de_pagina;i++)
+	for(unsigned int i =0;i<cantidad_marcos_de_pagina;i++)
+	{
 		marcos_libres[i]=1;
+	}
 
 
-printf("Tamaño entrada tlb: %d\n",sizeof(EntradaTLB));
-printf("Tamaño entrada tp: %d\n",sizeof(EntradaTP));
-
-	//printf("%u %u %u %u\n", TLB_instrucciones[0], TLB_instrucciones[1], TLB_instrucciones[2], TLB_instrucciones[3]);
-	//printf("Entradas TLB instrucciones: %u %u %u %u\n", TLB_instrucciones[0], TLB_instrucciones[1], TLB_instrucciones[2], TLB_instrucciones[3]);
-	//printf("Entradas TLB datos: %u %u %u %u\n", TLB_datos[0], TLB_datos[1], TLB_datos[2], TLB_datos[3]);
+printf("Tamaño entrada tlb: %lu\n",sizeof(EntradaTLB));
+printf("Tamaño entrada tp: %lu\n",sizeof(EntradaTP));
 
 	printf("Memoria física en MB: %u\n", cantidad_memoria_fisica_en_MB);
 	printf("Tamaño de página en KB: %u\n", tamanio_pagina_en_KB);
-	printf("Entradas de la tabla de página (cantidad de páginas virtuales): %Lu\n", entradas_tabla_de_pagina);
+	printf("Entradas de la tabla de página (cantidad de páginas virtuales): %u\n", entradas_tabla_de_pagina);
 	printf("Cantidad de marcos de página: %u\n", cantidad_marcos_de_pagina);
 	printf("Número de marcos de página: %u\n", bits_npv);
 	printf("Bits para offset: %u\n", bits_offset);
@@ -202,7 +200,7 @@ printf("Tamaño entrada tp: %d\n",sizeof(EntradaTP));
 		{
      if(!TLB_instrucciones->buscar_direccion(get_pagina_virtual(direccion_leida)));
     //  {
-        
+
    //   }
 			printf("Se leyó una instrucción\n");
 			//buscar_en_TLB_de_instrucciones(direccion_leida, INSTRUCCION);
@@ -226,6 +224,6 @@ printf("Tamaño entrada tp: %d\n",sizeof(EntradaTP));
 		}
 	}
 
-	
+
 	return 0;
 }
