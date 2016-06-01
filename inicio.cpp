@@ -167,8 +167,8 @@ FILE* archivo_trace = fopen(argv[1], "r");
 		marcos_libres[i]=1;
 
 
-printf("Tamaño entrada tlb: %Lu\n",sizeof(EntradaTLB));
-printf("Tamaño entrada tp: %Lu\n",sizeof(EntradaTP));
+printf("Tamaño entrada tlb: %lu\n",sizeof(EntradaTLB));
+printf("Tamaño entrada tp: %lu\n",sizeof(EntradaTP));
 
 	//printf("%u %u %u %u\n", TLB_instrucciones[0], TLB_instrucciones[1], TLB_instrucciones[2], TLB_instrucciones[3]);
 	//printf("Entradas TLB instrucciones: %u %u %u %u\n", TLB_instrucciones[0], TLB_instrucciones[1], TLB_instrucciones[2], TLB_instrucciones[3]);
