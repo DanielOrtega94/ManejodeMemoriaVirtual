@@ -92,6 +92,7 @@ int TablaPagina:: referenciado(int npv)
         //entrada[posicion].set_V(1);
 
        return entrada[posicion];
-     // else
-      //  return NULL;
+       else{
+           throw -1;
+       }
    }
