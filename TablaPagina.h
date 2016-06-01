@@ -7,7 +7,7 @@
 #include "Tabla.h"
 #include "Entrada.h"
 #include "EntradaTP.h"
-#include <vector>
+
 
 
 using namespace std;
@@ -15,8 +15,10 @@ using namespace std;
 class TablaPagina : public Tabla
 {
   public:
-  vector<EntradaTP*> *entrada;
- // EntradaTP *entrada;
+  //tamaño de la tabla de pagina
+  int tamano;
+  //arreglo de entradas
+  EntradaTP *entrada;
   //contructor que recibe la cantidad de entradas de la tabla de pagina 
   TablaPagina(int cantidad);
   //construcctor dado por defecto
@@ -24,8 +26,6 @@ class TablaPagina : public Tabla
   int LRU(int direccion_virtual);
   int at(int posicion);
   void buscar_npv(unsigned int direccion_virtual);
-  //int valido(int npv);
-  //int referenciado(int npv);
   EntradaTP get_entrada(int posicion);
 
 };

@@ -10,8 +10,8 @@
 class EntradaTLB : public Entrada
 {
 public:
-  unsigned char V;
-	unsigned char R;
+  unsigned int V;
+	unsigned int R;
 	unsigned int Npv;
 	unsigned int Nmp;
 

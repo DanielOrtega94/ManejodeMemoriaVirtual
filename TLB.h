@@ -13,10 +13,11 @@
 
 extern unsigned int bits_offset;
 extern unsigned int get_pagina_virtual(unsigned int direccion_virtual);
+
 class TLB : public Tabla {
 
   public:
-  	TablaPagina *tabla_pagina;
+  TablaPagina *tabla_pagina;
 	EntradaTLB *entradas;
   int entradas_tabla_de_pagina;
 //construcctor donde recibe las entradas de tabla de pagina
