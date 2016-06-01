@@ -15,6 +15,7 @@
       EntradaTP *nueva = new EntradaTP();
       //entrada[k] = nueva;
       entrada->push_back(nueva);
+      printf("V:%c\n",nueva->V);
     }
     
   }
@@ -88,7 +89,9 @@ int TablaPagina:: referenciado(int npv)
    EntradaTP TablaPagina::get_entrada(int posicion){
 
       if(posicion<entrada->size())
-       return entrada->at(posicion);
+        //entrada[posicion].set_V(1);
+
+       return entrada[posicion];
      // else 
       //  return NULL;
    }
