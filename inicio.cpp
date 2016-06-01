@@ -172,10 +172,6 @@ FILE* archivo_trace = fopen(argv[1], "r");
 printf("Tamaño entrada tlb: %lu\n",sizeof(EntradaTLB));
 printf("Tamaño entrada tp: %lu\n",sizeof(EntradaTP));
 
-	//printf("%u %u %u %u\n", TLB_instrucciones[0], TLB_instrucciones[1], TLB_instrucciones[2], TLB_instrucciones[3]);
-	//printf("Entradas TLB instrucciones: %u %u %u %u\n", TLB_instrucciones[0], TLB_instrucciones[1], TLB_instrucciones[2], TLB_instrucciones[3]);
-	//printf("Entradas TLB datos: %u %u %u %u\n", TLB_datos[0], TLB_datos[1], TLB_datos[2], TLB_datos[3]);
-
 	printf("Memoria física en MB: %u\n", cantidad_memoria_fisica_en_MB);
 	printf("Tamaño de página en KB: %u\n", tamanio_pagina_en_KB);
 	printf("Entradas de la tabla de página (cantidad de páginas virtuales): %u\n", entradas_tabla_de_pagina);
