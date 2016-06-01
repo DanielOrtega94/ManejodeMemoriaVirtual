@@ -36,6 +36,10 @@ class TablaPagina : public Tabla
   bool primer_caso(int npv);
   //se refiere al caso V=0
   bool segundo_caso(int npv);
+//funcion que buscar la posicion de un marco libre, si no se encontre
+  //retorna un 0
+ 
+
 
 };
 

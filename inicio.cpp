@@ -198,10 +198,9 @@ printf("Tamaño entrada tp: %lu\n",sizeof(EntradaTP));
 		// TODO: implementar  las funciones
 		if (caracter_leido[0] == 'i')
 		{
-     //if(!TLB_instrucciones->buscar_direccion(get_pagina_virtual(direccion_leida)));
-    //  {
+     if(TLB_instrucciones->LRU(direccion_leida)){
 
-   //   }
+    }
 			printf("Se leyó una instrucción\n");
 			//buscar_en_TLB_de_instrucciones(direccion_leida, INSTRUCCION);
 		}
