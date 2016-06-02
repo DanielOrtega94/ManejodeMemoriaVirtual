@@ -1,3 +1,4 @@
+#include <iostream>
 #include "TLB.h"
 #define ENTRADAS_TLB 4
 #define SUCCESS 1
@@ -25,7 +26,7 @@
 //Caso A 
       //diciendo q fue exitoso
       if (primer_caso(nro_pagina)) return SUCCESS;
-
+      else if (segundo_caso(nro_pagina)) return SUCCESS;
 //Caso C
 //Debemos reemplazar un entrada de la Tp la entradas menos reciente
 //debemos reemplazar en tablapagina
@@ -36,7 +37,7 @@
   }
 
   bool TLB::segundo_caso(int nro_pagina){
-
+  std::cout << "FUNCION SEGUNDOCASO" << std::endl;
 
 
     for(int i =0; i <ENTRADAS_TLB;i++){
@@ -47,17 +48,21 @@
 
 // caso cuando v=1, 
       if(aux.V==1){
+        std::cout << "segundo caso, V = 1 en tabla de pagina" << std::endl;
 
     entradas[i].Nmp=aux.Nmp;
     aux.set_R(nro_pagina);
     entradas[i].V = 1;
     entradas[i].R = 1;
     entradas[i].Npv=nro_pagina;
+        return true ;
       }
 
 
       if(aux.V==0){
+        std::cout << "segundo caso, V = 0 en tabla de pagina" << std::endl;
         if(tabla_pagina->cantidad_marcos_disponibles!=0) {
+          std::cout << "quedan marcos disponibles" << std::endl;
           tabla_pagina->cantidad_marcos_disponibles--;
           
           // Se actualiza la entrada en la tabla de pagina
@@ -71,25 +76,29 @@
           entradas[i].Npv = nro_pagina;
           //se cambia el puntero de la posicion actual
          tabla_pagina->posicion_actual++; 
-          
+           return true ;
 
         }
         else{
-        
+               std::cout << "NO quedan marcos disponibles" << std::endl;
+         return true;
         }
       }
+         
      }
    }
+   return false;
  }
 
 
 
   bool TLB::primer_caso(int nro_pagina){
-  
+  std::cout << "FUNCION PRIMERCASO" << std::endl;
+
     for(int i =0; i <ENTRADAS_TLB;i++){
 
      if(nro_pagina == entradas[i].Npv && entradas[i].V==1){
-
+  std::cout << "primer caso, V = 1 y npv = en tabla de pagina" << std::endl;
         entradas[i].set_R(1);
         tabla_pagina->get_entrada(nro_pagina).set_R(1);
         tabla_pagina->get_entrada(nro_pagina).set_V(1);
