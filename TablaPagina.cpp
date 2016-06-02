@@ -1,5 +1,6 @@
 #include "TablaPagina.h"
-
+#define LIBRE 0
+#define OCUPADO 1
 
   TablaPagina::TablaPagina(){
 
@@ -7,23 +8,23 @@
 
   // crea la tabla de pagina y agrega entradas por defecto
   //v=0 y r=0 sin nmp definido
-  TablaPagina::TablaPagina(int cantidad)
+  //
+  TablaPagina::TablaPagina(int cantidad,int cantidad_marcos_de_pagina)
   {
-   tamano=cantidad;
-   entrada = new EntradaTP[cantidad];
+    posicion_actual=0;
+    cantidad_marcos_disponibles  = cantidad_marcos_de_pagina;
+    tamano=cantidad;
+    tamano_mp=cantidad_marcos_de_pagina;
+    entrada = new EntradaTP[cantidad];
     int k=0;
     for(k=0; k<cantidad; k++){
-      entrada[k] = EntradaTP();
-
-    }
-
-
-
-
-
-
+      entrada[k] = EntradaTP();}
+    marcos_libres= new bool[cantidad_marcos_de_pagina];
+    for(unsigned int i =0;i<cantidad_marcos_de_pagina;i++){
+     marcos_libres[i]=LIBRE;
   }
 
+    }
 
   int TablaPagina::LRU(int direccion_virtual)
   {
@@ -60,7 +61,7 @@
 
   EntradaTP* TablaPagina::at(int posicion)
   {
-  	return 0;
+    return 0;
   }
 
 

@@ -57,7 +57,26 @@
 
 
       if(aux.V==0){
-      
+        if(tabla_pagina->cantidad_marcos_disponibles!=0) {
+          tabla_pagina->cantidad_marcos_disponibles--;
+          
+          // Se actualiza la entrada en la tabla de pagina
+          aux.Nmp =tabla_pagina->posicion_actual;
+          aux.V = 1;
+          aux.R = 1;
+          // Se actualiza la entrada en la entrada libre de la TLB
+          entradas[i].Nmp =tabla_pagina->posicion_actual;
+          entradas[i].V = 1;
+          entradas[i].R = 1;
+          entradas[i].Npv = nro_pagina;
+          //se cambia el puntero de la posicion actual
+         tabla_pagina->posicion_actual++; 
+          
+
+        }
+        else{
+        
+        }
       }
      }
    }
@@ -86,7 +105,7 @@
   { 
 
 
-  	return 0;
+    return 0;
   }
 
   //si es 0 es un miss y debe buscar
@@ -97,7 +116,7 @@
     if(entradas->V == 0){
      //  for(int i =0; i< entradas_tabla_de_pagina;i++){
      //  if(npv==entradas[i]){
-     /*	no match for ‘operator==’ (operand types are ‘int’ and ‘Entrada’)
+     /* no match for ‘operator==’ (operand types are ‘int’ and ‘Entrada’)
         if(npv==entradas[i]){*/
 
 
