@@ -1,5 +1,5 @@
 #ifndef _ADTEntrada_
-#define _ADTEntrada_ 
+#define _ADTEntrada_
 
 #include <cstdio>
 #include <cstdlib>
@@ -13,12 +13,12 @@ using namespace std;
 class Entrada {
 
 public:
-  char V;
-  char R;
-  virtual void set_V(int  v) = 0;
-  virtual void set_R(int  v) = 0;
-  virtual void set_Nmp(unsigned int v) = 0;
-  virtual void set_Npv(unsigned int v) = 0;
+	char V;
+	char R;
+	virtual void set_V(int  v) = 0;
+	virtual void set_R(int  v) = 0;
+	virtual void set_Nmp(unsigned int v) = 0;
+	virtual void set_Npv(unsigned int v) = 0;
 };
 
 #endif

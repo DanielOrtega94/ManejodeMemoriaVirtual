@@ -19,10 +19,10 @@ using namespace std;
 
 class TablaPagina : public Tabla
 {
-  public:
-  //arreglo de marcos libres, pero no se esta ocupando 
+public:
+  //arreglo de marcos libres, pero no se esta ocupando
   bool *marcos_libres;
-  
+
   // Lleva la cuenta de los marcos de pagina desocupados
   int cantidad_marcos_disponibles;
   //Tamaño total de marcos de pagina disponibles,se usa para hacer lista circular
@@ -35,7 +35,7 @@ class TablaPagina : public Tabla
   EntradaTP *entrada;
 
   //contructor que recibe la cantidad de entradas de la tabla de pagina y la cantidad de mar
-  TablaPagina(int cantidad,int cantidad_marcos_de_pagina);
+  TablaPagina(int cantidad, int cantidad_marcos_de_pagina);
 
   //contructor que recibe la cantidad de entradas de la tabla de pagina
   TablaPagina(int cantidad);

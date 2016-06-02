@@ -11,9 +11,9 @@ class EntradaTLB : public Entrada
 {
 public:
   unsigned int V;
-	unsigned int R;
-	unsigned int Npv;
-	unsigned int Nmp;
+  unsigned int R;
+  unsigned int Npv;
+  unsigned int Nmp;
 
   EntradaTLB(int nmp, int npv);
   EntradaTLB();

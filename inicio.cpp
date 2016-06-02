@@ -50,7 +50,7 @@ inicio.cpp:162:21: error: request for member ‘LRU’ in ‘TLB_instrucciones�
 using namespace std;
 
 int contador_fallas;
-int puntero_mp=0;
+int puntero_mp = 0;
 unsigned int entradas_tabla_de_pagina = 0;
 unsigned int cantidad_memoria_fisica_en_MB = 0;
 unsigned int tamanio_pagina_en_KB = 0;
@@ -59,15 +59,15 @@ unsigned int bits_offset = 0;
 unsigned int bits_npv = 0;
 unsigned int bits_mp = 0;
 unsigned int** marcos_de_pagina = NULL;
-unsigned int PUROS_UNOS = ~(0 << (TAMANIO_DIRECCION_VIRTUAL_EN_BITS-1));
-unsigned int PUROS_CEROS = 0 << (TAMANIO_DIRECCION_VIRTUAL_EN_BITS-1);
+unsigned int PUROS_UNOS = ~(0 << (TAMANIO_DIRECCION_VIRTUAL_EN_BITS - 1));
+unsigned int PUROS_CEROS = 0 << (TAMANIO_DIRECCION_VIRTUAL_EN_BITS - 1);
 
 
 
 
 unsigned long long int calcular_marcos_de_pagina()
 {
-	return (cantidad_memoria_fisica_en_MB/tamanio_pagina_en_KB)*(1<<10); // se multiplica por 2^10 para compensar la diferencia de unidades
+	return (cantidad_memoria_fisica_en_MB / tamanio_pagina_en_KB) * (1 << 10); // se multiplica por 2^10 para compensar la diferencia de unidades
 }
 
 unsigned int calcular_bits_offset()
@@ -96,28 +96,28 @@ unsigned int calcular_bits_marco_pagina()
 
 unsigned int get_offset(unsigned int direccion_virtual)
 {
-	return (~(PUROS_UNOS<<bits_offset)) & direccion_virtual;
+	return (~(PUROS_UNOS << bits_offset)) & direccion_virtual;
 }
 
 unsigned int get_pagina_virtual(unsigned int direccion_virtual)
 {
-	return direccion_virtual>>bits_offset;
+	return direccion_virtual >> bits_offset;
 }
 
 
 
 
 int main(int argc, char const *argv[])
-	{
+{
 
 
 	unsigned char caracter_leido[2] = {'\0', '\0'}; // ocupo string en vez de char para que no lea whitespace
 	unsigned int direccion_leida = 0x0;
 
 
-FILE* archivo_trace = fopen(argv[1], "r");
+	FILE* archivo_trace = fopen(argv[1], "r");
 
-	if(archivo_trace == NULL){
+	if (archivo_trace == NULL) {
 		perror("Error: ");
 		exit(1);
 	}
@@ -134,17 +134,17 @@ FILE* archivo_trace = fopen(argv[1], "r");
 	entradas_tabla_de_pagina = 1 << (bits_npv);
 
 	// crea los objetos necesarios para emular la tarea
-  TLB TLB_instrucciones(entradas_tabla_de_pagina);
-  TLB TLB_datos(entradas_tabla_de_pagina);
-  TablaPagina* tabla_de_pagina = new TablaPagina(entradas_tabla_de_pagina,cantidad_marcos_de_pagina);
-  //marcos libres estara en 1 si esta disponible y 0 si no lo esta
-    TLB_instrucciones.set_tp(tabla_de_pagina);
-    TLB_datos.set_tp(tabla_de_pagina);
+	TLB TLB_instrucciones(entradas_tabla_de_pagina);
+	TLB TLB_datos(entradas_tabla_de_pagina);
+	TablaPagina* tabla_de_pagina = new TablaPagina(entradas_tabla_de_pagina, cantidad_marcos_de_pagina);
+	//marcos libres estara en 1 si esta disponible y 0 si no lo esta
+	TLB_instrucciones.set_tp(tabla_de_pagina);
+	TLB_datos.set_tp(tabla_de_pagina);
 //seteamos todos los marcos de pagina como disponible en un principio
 
 
-printf("Tamaño entrada tlb: %lu\n",sizeof(EntradaTLB));
-printf("Tamaño entrada tp: %lu\n",sizeof(EntradaTP));
+	printf("Tamaño entrada tlb: %lu\n", sizeof(EntradaTLB));
+	printf("Tamaño entrada tp: %lu\n", sizeof(EntradaTP));
 
 	printf("Memoria física en MB: %u\n", cantidad_memoria_fisica_en_MB);
 	printf("Tamaño de página en KB: %u\n", tamanio_pagina_en_KB);
@@ -172,23 +172,23 @@ printf("Tamaño entrada tp: %lu\n",sizeof(EntradaTP));
 		// TODO: implementar  las funciones
 		if (caracter_leido[0] == 'i')
 		{
-     if(TLB_instrucciones.LRU(direccion_leida)){
+			if (TLB_instrucciones.LRU(direccion_leida)) {
 
-    }
+			}
 			printf("Se leyó una instrucción\n");
 			//buscar_en_TLB_de_instrucciones(direccion_leida, INSTRUCCION);
 		}
 		else if (caracter_leido[0] == 'l')
 		{
-      //TLB_datos(get_pagina_virtual(direccion_leida));
+			//TLB_datos(get_pagina_virtual(direccion_leida));
 			printf("Se leyó un load\n");
 			//buscar_en_TLB_de_datos(direccion_leida, DATO);
 		}
 		else if (caracter_leido[0] == 's')
 		{
-     // TLB_datos(get_pagina_virtual(direccion_leida));
+			// TLB_datos(get_pagina_virtual(direccion_leida));
 			printf("Se leyó un store\n");
-		TLB_instrucciones.LRU(direccion_leida);
+			TLB_instrucciones.LRU(direccion_leida);
 		}
 		else
 		{

@@ -17,11 +17,11 @@ class EntradaTP : public Entrada
 {
 public:
   unsigned int V;
-	unsigned int R;
-	unsigned int Nmp;
-  
+  unsigned int R;
+  unsigned int Nmp;
 
-  EntradaTP(); 
+
+  EntradaTP();
   EntradaTP(int nmp);
   void set_V(int v);
   void set_Nmp(unsigned int v);
