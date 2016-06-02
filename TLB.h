@@ -24,6 +24,7 @@ public:
 
   // PPuntero a un arreglo de EntradasTLB
   EntradaTLB *entradas;
+  int posicion_actual;
 
   // cantidad de entradas que contendra la tabla de pagina
   //int entradas_tabla_de_pagina;
@@ -37,13 +38,14 @@ public:
   // retorna un puntero al a entrada en la posición i-esma
   EntradaTLB* at(int posicion);
 
-
   void buscar_direccion(int npv);
 
 // referido al primer caso, sin necesidad de entrar a LRU
   bool primer_caso(int nro);
 //va a buscar entradas con V=0
   bool segundo_caso(int nro);
+  bool tercer_caso(int nro );
+  int circular();
   void buscar_npv(unsigned int direccion_virtual);
   void set_tp(TablaPagina *tabla);
 

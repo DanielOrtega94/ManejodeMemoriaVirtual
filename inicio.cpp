@@ -13,37 +13,6 @@
 #define DATO 1
 #define TAMANIO_DIRECCION_VIRTUAL_EN_BITS 32
 
-/*
-
-inicio.cpp:106:49: error: no matching function for call to ‘TLB::TLB()’
-   TLB TLB_instrucciones[entradas_tabla_de_pagina];
-                                                 ^
-In file included from inicio.cpp:7:0:
-TLB.h:32:3: note: candidate: TLB::TLB(int)
-   TLB(int entradas_tablas_de_pagina);
-   ^
-TLB.h:32:3: note:   candidate expects 1 argument, 0 provided
-TLB.h:18:7: note: candidate: TLB::TLB(const TLB&)
- class TLB : public Tabla {
-       ^
-TLB.h:18:7: note:   candidate expects 1 argument, 0 provided
-inicio.cpp:107:41: error: no matching function for call to ‘TLB::TLB()’
-   TLB TLB_datos[entradas_tabla_de_pagina];
-                                         ^
-In file included from inicio.cpp:7:0:
-TLB.h:32:3: note: candidate: TLB::TLB(int)
-   TLB(int entradas_tablas_de_pagina);
-   ^
-TLB.h:32:3: note:   candidate expects 1 argument, 0 provided
-TLB.h:18:7: note: candidate: TLB::TLB(const TLB&)
- class TLB : public Tabla {
-       ^
-TLB.h:18:7: note:   candidate expects 1 argument, 0 provided
-inicio.cpp:162:21: error: request for member ‘LRU’ in ‘TLB_instrucciones’, which is of non-class type ‘TLB [entradas_tabla_de_pagina]’
-   TLB_instrucciones.LRU(direccion_leida);
-
-*/
-
 
 
 

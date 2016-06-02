@@ -4,9 +4,14 @@
 #define SUCCESS 1
 
 
+/*
+No se dara segunda oportunidad al quitar un marco en la tabla de pagina
+*/
+
 TLB ::TLB(int  entradas_tp)
 {
   //entradas_tabla_de_pagina=entradas_tp;
+  posicion_actual = 0;
   entradas = new EntradaTLB[ENTRADAS_TLB];
   int j = 0;
   for (j = 0; j < ENTRADAS_TLB; j++)
@@ -20,13 +25,11 @@ int TLB ::LRU(int direccion_virtual)
 
   int nro_pagina = get_pagina_virtual(direccion_virtual);
 
-  //si cae en algun caso deberiamos romper el for
-
-
 //Caso A
   //diciendo q fue exitoso
   if (primer_caso(nro_pagina)) return SUCCESS;
   else if (segundo_caso(nro_pagina)) return SUCCESS;
+  else if (tercer_caso(nro_pagina)) return SUCCESS;
 //Caso C
 //Debemos reemplazar un entrada de la Tp la entradas menos reciente
 //debemos reemplazar en tablapagina
@@ -36,6 +39,24 @@ int TLB ::LRU(int direccion_virtual)
   return 0;
 }
 
+bool TLB::primer_caso(int nro_pagina) {
+  std::cout << "FUNCION PRIMERCASO" << std::endl;
+  EntradaTP* aux = tabla_pagina->get_entrada(nro_pagina);
+  for (int i = 0; i < ENTRADAS_TLB; i++) {
+
+    if (nro_pagina == entradas[i].Npv && entradas[i].V == 1) {
+      std::cout << "primer caso, V = 1 y npv = en tabla de pagina" << std::endl;
+      entradas[i].set_R(1);
+
+      aux->R = 1;
+      aux->V = 1;
+      return true;
+    }
+  }
+  return false;
+}
+
+
 bool TLB::segundo_caso(int nro_pagina) {
   std::cout << "FUNCION SEGUNDOCASO" << std::endl;
 
@@ -43,15 +64,14 @@ bool TLB::segundo_caso(int nro_pagina) {
   for (int i = 0; i < ENTRADAS_TLB; i++) {
     if (entradas[i].V == 0) {
 
-      EntradaTP aux = tabla_pagina->get_entrada(nro_pagina);
+      EntradaTP* aux = tabla_pagina->get_entrada(nro_pagina);
 
 
 // caso cuando v=1,
-      if (aux.V == 1) {
+      if (aux->V == 1) {
         std::cout << "segundo caso, V = 1 en tabla de pagina" << std::endl;
-
-        entradas[i].Nmp = aux.Nmp;
-        aux.set_R(nro_pagina);
+        entradas[i].Nmp = aux->Nmp;
+        aux->set_R(1);
         entradas[i].V = 1;
         entradas[i].R = 1;
         entradas[i].Npv = nro_pagina;
@@ -59,16 +79,16 @@ bool TLB::segundo_caso(int nro_pagina) {
       }
 
 
-      if (aux.V == 0) {
+      if (aux->V == 0) {
         std::cout << "segundo caso, V = 0 en tabla de pagina" << std::endl;
         if (tabla_pagina->cantidad_marcos_disponibles != 0) {
           std::cout << "quedan marcos disponibles" << std::endl;
           tabla_pagina->cantidad_marcos_disponibles--;
 
           // Se actualiza la entrada en la tabla de pagina
-          aux.Nmp = tabla_pagina->posicion_actual;
-          aux.V = 1;
-          aux.R = 1;
+          aux->Nmp = tabla_pagina->posicion_actual;
+          aux->V = 1;
+          aux->R = 1;
           // Se actualiza la entrada en la entrada libre de la TLB
           entradas[i].Nmp = tabla_pagina->posicion_actual;
           entradas[i].V = 1;
@@ -90,22 +110,39 @@ bool TLB::segundo_caso(int nro_pagina) {
   return false;
 }
 
+bool TLB::tercer_caso(int nro_pagina) {
+// no quedan entradas desocupadas en la TLB
+  EntradaTP* aux = tabla_pagina->get_entrada(nro_pagina);
+  //solamente para q entre
+  //i, lo debemos cambiar por un puntero que recorra cirulamente la tlb
+  int lru = circular();
+  if (nro_pagina != entradas[lru].Npv && entradas[lru].V == 1) {
+    // caso V=1 y R=0
+    if (aux->V == 1 && aux->R == 0) {
+      aux->R = 1;
+      /*entradas[lru].Nmp = aux->Nmp;
+      entradas[lru].V = 1;
+      entradas[lru].R = 1;
+      entradas[lru].Npv = nro_pagina;
+      aux->V=0;
 
-
-bool TLB::primer_caso(int nro_pagina) {
-  std::cout << "FUNCION PRIMERCASO" << std::endl;
-
-  for (int i = 0; i < ENTRADAS_TLB; i++) {
-
-    if (nro_pagina == entradas[i].Npv && entradas[i].V == 1) {
-      std::cout << "primer caso, V = 1 y npv = en tabla de pagina" << std::endl;
-      entradas[i].set_R(1);
-      tabla_pagina->get_entrada(nro_pagina).set_R(1);
-      tabla_pagina->get_entrada(nro_pagina).set_V(1);
-      return true;
+       tabla_pagina->entrada[aux].Nmp = lru->Nmp;
+       tabla_pagina->entrada[lru].V = 1;
+       tabla_pagina->entrada[lru].R = 1;*/
+      return true ;
     }
+    // caso V=1 y R=1
+    if (aux->V == 1 && aux->R == 1)
+
+      return true;
   }
+
+
   return false;
+}
+
+int TLB::circular() {
+  return (posicion_actual++) % 4; // 4 entradas en la TLB
 }
 
 

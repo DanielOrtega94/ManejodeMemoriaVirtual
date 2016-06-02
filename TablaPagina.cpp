@@ -103,11 +103,11 @@ void TablaPagina::buscar_npv(unsigned int direccion_virtual)
    }*/
 }
 
-EntradaTP TablaPagina::get_entrada(int posicion) {
+EntradaTP* TablaPagina::get_entrada(int posicion) {
 
   if (posicion < tamano)
 
-    return entrada[posicion];
+    return &entrada[posicion];
   else
     throw - 1;
 }
@@ -121,4 +121,16 @@ bool TablaPagina::primer_caso(int npv) {
 //metodo debe busar un marco libre
 bool TablaPagina::segundo_caso(int npv) {
 
+}
+
+void  TablaPagina::imprimir() {
+
+for(int i =0;i<tamano;i++){
+  std::cout<< "i:%d V:%d R:%d Nmp:%d" << i<< entrada[i].V << entrada[i].R << entrada[i].Nmp<< endl;
+}
+
+}
+
+int TablaPagina::circular(){
+  return (posicion_actual++)%tamano;
 }
