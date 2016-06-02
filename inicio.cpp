@@ -13,9 +13,6 @@
 #define DATO 1
 #define TAMANIO_DIRECCION_VIRTUAL_EN_BITS 32
 
-
-
-
 using namespace std;
 
 int contador_fallas;
@@ -30,9 +27,6 @@ unsigned int bits_mp = 0;
 unsigned int** marcos_de_pagina = NULL;
 unsigned int PUROS_UNOS = ~(0 << (TAMANIO_DIRECCION_VIRTUAL_EN_BITS - 1));
 unsigned int PUROS_CEROS = 0 << (TAMANIO_DIRECCION_VIRTUAL_EN_BITS - 1);
-
-
-
 
 unsigned long long int calcular_marcos_de_pagina()
 {
@@ -73,16 +67,11 @@ unsigned int get_pagina_virtual(unsigned int direccion_virtual)
 	return direccion_virtual >> bits_offset;
 }
 
-
-
-
 int main(int argc, char const *argv[])
 {
 
-
 	unsigned char caracter_leido[2] = {'\0', '\0'}; // ocupo string en vez de char para que no lea whitespace
 	unsigned int direccion_leida = 0x0;
-
 
 	FILE* archivo_trace = fopen(argv[1], "r");
 

@@ -5,13 +5,13 @@
 
 
 /*
-No se dara segunda oportunidad al quitar un marco en la tabla de pagina
+No se dara segunda oportunidad al quitar un marco en la tabla de pagina 
 */
 
 TLB ::TLB(int  entradas_tp)
 {
   //entradas_tabla_de_pagina=entradas_tp;
-  posicion_actual = 0;
+  posicion_actual=0;
   entradas = new EntradaTLB[ENTRADAS_TLB];
   int j = 0;
   for (j = 0; j < ENTRADAS_TLB; j++)
@@ -24,7 +24,7 @@ int TLB ::LRU(int direccion_virtual)
 
 
   int nro_pagina = get_pagina_virtual(direccion_virtual);
-
+  
 //Caso A
   //diciendo q fue exitoso
   if (primer_caso(nro_pagina)) return SUCCESS;
@@ -41,7 +41,7 @@ int TLB ::LRU(int direccion_virtual)
 
 bool TLB::primer_caso(int nro_pagina) {
   std::cout << "FUNCION PRIMERCASO" << std::endl;
-  EntradaTP* aux = tabla_pagina->get_entrada(nro_pagina);
+      EntradaTP* aux = tabla_pagina->get_entrada(nro_pagina);
   for (int i = 0; i < ENTRADAS_TLB; i++) {
 
     if (nro_pagina == entradas[i].Npv && entradas[i].V == 1) {
@@ -100,6 +100,8 @@ bool TLB::segundo_caso(int nro_pagina) {
 
         }
         else {
+          //falta impplementer caso
+          // Esta wea no existe!! :D
           std::cout << "NO quedan marcos disponibles" << std::endl;
           return true;
         }
@@ -110,38 +112,50 @@ bool TLB::segundo_caso(int nro_pagina) {
   return false;
 }
 
-bool TLB::tercer_caso(int nro_pagina) {
+bool TLB::tercer_caso(int nro_pagina){
 // no quedan entradas desocupadas en la TLB
   EntradaTP* aux = tabla_pagina->get_entrada(nro_pagina);
   //solamente para q entre
   //i, lo debemos cambiar por un puntero que recorra cirulamente la tlb
-  int lru = circular();
-  if (nro_pagina != entradas[lru].Npv && entradas[lru].V == 1) {
-    // caso V=1 y R=0
-    if (aux->V == 1 && aux->R == 0) {
-      aux->R = 1;
-      /*entradas[lru].Nmp = aux->Nmp;
-      entradas[lru].V = 1;
-      entradas[lru].R = 1;
-      entradas[lru].Npv = nro_pagina;
-      aux->V=0;
+  int lru_tlb=circular();
+  int lru_tp=tabla_pagina->puntero_LRU;
+  //caso Npv= y entradaTP.V=1
+    if (nro_pagina != entradas[lru_tlb].Npv && entradas[lru_tlb].V == 1) {
+      // caso V=1 y R=0
+        
+      // este while quizas va en otro lado
+      while (tabla_pagina->entrada[lru_tp].R == 1)
+      {
+        lru_tp = tabla_pagina->circular();
+      }
+      if(aux->V==1 && aux->R==0){ // tabla de pagina tiene marco de pagina
+      
+    
+          aux->R=1;
+        entradas[lru_tlb].Nmp = aux->Nmp;
+        entradas[lru_tlb].V = 1;
+        entradas[lru_tlb].R = 1;
+        entradas[lru_tlb].Npv = nro_pagina;
+        return true;
+        //aux->V=0; // Esto esta de mas
+        
+       
+      }
+      // caso V=1 y R=1 
+      else if (aux->V==1 && aux->R==1){
+        // TODO: corregir esta wea
+        tabla_pagina->entrada[lru_tp].Nmp = aux->Nmp;
+        tabla_pagina->entrada[lru_tp].V = 1;
+        tabla_pagina->entrada[lru_tp].R = 1;
+        return true ;
 
-       tabla_pagina->entrada[aux].Nmp = lru->Nmp;
-       tabla_pagina->entrada[lru].V = 1;
-       tabla_pagina->entrada[lru].R = 1;*/
-      return true ;
     }
-    // caso V=1 y R=1
-    if (aux->V == 1 && aux->R == 1)
-
-      return true;
-  }
-
-
+    }
+  
   return false;
 }
 
-int TLB::circular() {
+int TLB::circular(){
   return (posicion_actual++) % 4; // 4 entradas en la TLB
 }
 

@@ -12,6 +12,7 @@ TablaPagina::TablaPagina() {
 TablaPagina::TablaPagina(int cantidad, int cantidad_marcos_de_pagina)
 {
   posicion_actual = 0;
+  puntero_LRU=0;
   cantidad_marcos_disponibles  = cantidad_marcos_de_pagina;
   tamano = cantidad;
   tamano_mp = cantidad_marcos_de_pagina;

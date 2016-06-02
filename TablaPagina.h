@@ -29,6 +29,8 @@ public:
   int tamano_mp;
   // variable que recorre el arreglo de marcos de pagina
   int posicion_actual;
+  //  denota la posicion del puntero actual
+  int puntero_LRU;
   //tamaño de la tabla de pagina
   int tamano;
   //arreglo de entradas
@@ -57,7 +59,7 @@ public:
   //retorna un 0
   //muestra los campos de la tabla
   void imprimir();
-
+  // entrega puntero de posicion actual a tabla de pagina
   int circular();
 
 
