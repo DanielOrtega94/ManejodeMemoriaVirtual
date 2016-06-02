@@ -33,13 +33,13 @@ class TablaPagina : public Tabla
   int tamano;
   //arreglo de entradas
   EntradaTP *entrada;
-<<<<<<< HEAD
+
   //contructor que recibe la cantidad de entradas de la tabla de pagina y la cantidad de mar
   TablaPagina(int cantidad,int cantidad_marcos_de_pagina);
-=======
+
   //contructor que recibe la cantidad de entradas de la tabla de pagina
   TablaPagina(int cantidad);
->>>>>>> 417c1d11cac279c22bde5b6ec6004e615f04e8a2
+
   //construcctor dado por defecto
   TablaPagina();
   int LRU(int direccion_virtual);

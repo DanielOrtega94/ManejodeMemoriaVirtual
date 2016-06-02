@@ -41,9 +41,9 @@ class TLB : public Tabla {
   void buscar_direccion(int npv);
 
 // referido al primer caso, sin necesidad de entrar a LRU
-bool primer_caso(int nro);
+  bool primer_caso(int nro);
 //va a buscar entradas con V=0
-bool segundo_caso(int nro);
+  bool segundo_caso(int nro);
   void buscar_npv(unsigned int direccion_virtual);
   void set_tp(TablaPagina *tabla);
  

@@ -13,14 +13,42 @@
 #define DATO 1
 #define TAMANIO_DIRECCION_VIRTUAL_EN_BITS 32
 
+/*
+
+inicio.cpp:106:49: error: no matching function for call to ‘TLB::TLB()’
+   TLB TLB_instrucciones[entradas_tabla_de_pagina];
+                                                 ^
+In file included from inicio.cpp:7:0:
+TLB.h:32:3: note: candidate: TLB::TLB(int)
+   TLB(int entradas_tablas_de_pagina);
+   ^
+TLB.h:32:3: note:   candidate expects 1 argument, 0 provided
+TLB.h:18:7: note: candidate: TLB::TLB(const TLB&)
+ class TLB : public Tabla {
+       ^
+TLB.h:18:7: note:   candidate expects 1 argument, 0 provided
+inicio.cpp:107:41: error: no matching function for call to ‘TLB::TLB()’
+   TLB TLB_datos[entradas_tabla_de_pagina];
+                                         ^
+In file included from inicio.cpp:7:0:
+TLB.h:32:3: note: candidate: TLB::TLB(int)
+   TLB(int entradas_tablas_de_pagina);
+   ^
+TLB.h:32:3: note:   candidate expects 1 argument, 0 provided
+TLB.h:18:7: note: candidate: TLB::TLB(const TLB&)
+ class TLB : public Tabla {
+       ^
+TLB.h:18:7: note:   candidate expects 1 argument, 0 provided
+inicio.cpp:162:21: error: request for member ‘LRU’ in ‘TLB_instrucciones’, which is of non-class type ‘TLB [entradas_tabla_de_pagina]’
+   TLB_instrucciones.LRU(direccion_leida);
+
+*/
+
+
 
 
 using namespace std;
 
-
-
-TLB *TLB_datos;
-TLB *TLB_instrucciones;
 int contador_fallas;
 int puntero_mp=0;
 unsigned int entradas_tabla_de_pagina = 0;
@@ -31,7 +59,6 @@ unsigned int bits_offset = 0;
 unsigned int bits_npv = 0;
 unsigned int bits_mp = 0;
 unsigned int** marcos_de_pagina = NULL;
-
 unsigned int PUROS_UNOS = ~(0 << (TAMANIO_DIRECCION_VIRTUAL_EN_BITS-1));
 unsigned int PUROS_CEROS = 0 << (TAMANIO_DIRECCION_VIRTUAL_EN_BITS-1);
 
@@ -107,14 +134,12 @@ FILE* archivo_trace = fopen(argv[1], "r");
 	entradas_tabla_de_pagina = 1 << (bits_npv);
 
 	// crea los objetos necesarios para emular la tarea
-  TLB_instrucciones = new TLB(entradas_tabla_de_pagina);
-  TLB_datos = new TLB(entradas_tabla_de_pagina);
-  EntradaTLB *etlb= new EntradaTLB();
-  EntradaTP *tp= new EntradaTP();
+  TLB TLB_instrucciones(entradas_tabla_de_pagina);
+  TLB TLB_datos(entradas_tabla_de_pagina);
   TablaPagina* tabla_de_pagina = new TablaPagina(entradas_tabla_de_pagina,cantidad_marcos_de_pagina);
   //marcos libres estara en 1 si esta disponible y 0 si no lo esta
-    TLB_instrucciones->set_tp(tabla_de_pagina);
-    TLB_datos->set_tp(tabla_de_pagina);
+    TLB_instrucciones.set_tp(tabla_de_pagina);
+    TLB_datos.set_tp(tabla_de_pagina);
 //seteamos todos los marcos de pagina como disponible en un principio
 
 
@@ -141,13 +166,13 @@ printf("Tamaño entrada tp: %lu\n",sizeof(EntradaTP));
 		//printf("Dirección virtual: %x\n", direccion_leida);
 
 		printf("offset: %x\n", get_offset(direccion_leida));
-		printf("pagina virtual: %u\n", get_pagina_virtual(direccion_leida));
+		printf("pagina virtual: %x\n", get_pagina_virtual(direccion_leida));
 
 		//ejecuccion principal del programa
 		// TODO: implementar  las funciones
 		if (caracter_leido[0] == 'i')
 		{
-     if(TLB_instrucciones->LRU(direccion_leida)){
+     if(TLB_instrucciones.LRU(direccion_leida)){
 
     }
 			printf("Se leyó una instrucción\n");
@@ -163,7 +188,7 @@ printf("Tamaño entrada tp: %lu\n",sizeof(EntradaTP));
 		{
      // TLB_datos(get_pagina_virtual(direccion_leida));
 			printf("Se leyó un store\n");
-			//buscar_en_TLB_de_datos(direccion_leida, DATO);
+		TLB_instrucciones.LRU(direccion_leida);
 		}
 		else
 		{
