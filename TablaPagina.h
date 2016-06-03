@@ -28,7 +28,7 @@ public:
   //Tamaño total de marcos de pagina disponibles,se usa para hacer lista circular
   int tamano_mp;
   // variable que recorre el arreglo de marcos de pagina
-  int posicion_actual;
+  int marco_actual;
   //  denota la posicion del puntero actual
   int puntero_LRU;
   //tamaño de la tabla de pagina
@@ -61,6 +61,9 @@ public:
   void imprimir();
   // entrega puntero de posicion actual a tabla de pagina
   int circular();
+  //entrega puntero de posicion acutal
+  int circular_LRU();
+
 
 
 
