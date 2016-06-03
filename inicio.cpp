@@ -7,8 +7,9 @@
 #include "TLB.h"
 #include "TablaPagina.h"
 #include "Tabla.h"
+
 #define ENTRADAS_TLB 4
-#define ITERACIONES 10
+#define ITERACIONES 100000
 #define INSTRUCCION 0
 #define DATO 1
 #define TAMANIO_DIRECCION_VIRTUAL_EN_BITS 32
@@ -130,23 +131,21 @@ int main(int argc, char const *argv[])
 		// TODO: implementar  las funciones
 		if (caracter_leido[0] == 'i')
 		{
-			if (TLB_instrucciones.LRU(direccion_leida)) {
-
-			}
+			
 			printf("Se leyó una instrucción\n");
-			//buscar_en_TLB_de_instrucciones(direccion_leida, INSTRUCCION);
+				TLB_instrucciones.LRU(direccion_leida);
 		}
 		else if (caracter_leido[0] == 'l')
 		{
 			//TLB_datos(get_pagina_virtual(direccion_leida));
 			printf("Se leyó un load\n");
-			//buscar_en_TLB_de_datos(direccion_leida, DATO);
+			TLB_datos.LRU(direccion_leida);
 		}
 		else if (caracter_leido[0] == 's')
 		{
 			// TLB_datos(get_pagina_virtual(direccion_leida));
 			printf("Se leyó un store\n");
-			TLB_instrucciones.LRU(direccion_leida);
+			TLB_datosLRU(direccion_leida);
 		}
 		else
 		{

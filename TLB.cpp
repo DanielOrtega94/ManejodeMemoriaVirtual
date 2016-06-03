@@ -12,10 +12,13 @@ TLB ::TLB(int  entradas_tp)
 {
   //entradas_tabla_de_pagina=entradas_tp;
   posicion_actual = 0;
+  contador = 0;
   entradas = new EntradaTLB[ENTRADAS_TLB];
   int j = 0;
   for (j = 0; j < ENTRADAS_TLB; j++)
     entradas[j] = EntradaTLB();
+
+
 }
 
 
@@ -40,16 +43,17 @@ int TLB ::LRU(int direccion_virtual)
 }
 
 bool TLB::primer_caso(int nro_pagina) {
-  std::cout << "FUNCION PRIMERCASO" << std::endl;
   EntradaTP* aux = tabla_pagina->get_entrada(nro_pagina);
   for (int i = 0; i < ENTRADAS_TLB; i++) {
 
     if (nro_pagina == entradas[i].Npv && entradas[i].V == 1) {
+
       std::cout << "primer caso, V = 1 y npv = en tabla de pagina" << std::endl;
       entradas[i].set_R(1);
 
       aux->R = 1;
       aux->V = 1;
+      std::cout << "FUNCION PRIMERCASO" << std::endl;
       return true;
     }
   }
@@ -58,7 +62,6 @@ bool TLB::primer_caso(int nro_pagina) {
 
 
 bool TLB::segundo_caso(int nro_pagina) {
-  std::cout << "FUNCION SEGUNDOCASO" << std::endl;
 
 
   for (int i = 0; i < ENTRADAS_TLB; i++) {
@@ -69,17 +72,20 @@ bool TLB::segundo_caso(int nro_pagina) {
 
 // caso cuando v=1,
       if (aux->V == 1) {
+
         std::cout << "segundo caso, V = 1 en tabla de pagina" << std::endl;
         entradas[i].Nmp = aux->Nmp;
         aux->set_R(1);
         entradas[i].V = 1;
         entradas[i].R = 1;
         entradas[i].Npv = nro_pagina;
+        std::cout << "FUNCION SEGUNDOCASO" << std::endl;
         return true ;
       }
 
 
       if (aux->V == 0) {
+
         std::cout << "segundo caso, V = 0 en tabla de pagina" << std::endl;
         if (tabla_pagina->cantidad_marcos_disponibles != 0) {
           std::cout << "quedan marcos disponibles" << std::endl;
@@ -96,13 +102,16 @@ bool TLB::segundo_caso(int nro_pagina) {
           entradas[i].Npv = nro_pagina;
           //se cambia el puntero de la posicion actual
           tabla_pagina->marco_actual++;
+          std::cout << "FUNCION SEGUNDOCASO" << std::endl;
           return true ;
 
         }
         else {
+
           //falta impplementer caso
           // Esta wea no existe!! :D
           std::cout << "NO quedan marcos disponibles" << std::endl;
+          std::cout << "FUNCION SEGUNDOCASO" << std::endl; // este no deberia suceder
           return true;
         }
       }
@@ -113,7 +122,7 @@ bool TLB::segundo_caso(int nro_pagina) {
 }
 
 bool TLB::tercer_caso(int nro_pagina) {
-    std::cout << "FUNCION TERCERCASO" << std::endl;
+
 // no quedan entradas desocupadas en la TLB
   EntradaTP* aux = tabla_pagina->get_entrada(nro_pagina);
   //solamente para q entre
@@ -123,15 +132,18 @@ bool TLB::tercer_caso(int nro_pagina) {
   //caso Npv= y entradaTP.V=1
 
   if (aux->V == 1 /*&& aux->R==0*/) { // tabla de pagina tiene marco de pagina
+
     aux->R = 1;
     entradas[lru_tlb].Nmp = aux->Nmp;
     entradas[lru_tlb].V = 1;
     entradas[lru_tlb].R = 1;
     entradas[lru_tlb].Npv = nro_pagina;
+    std::cout << "FUNCION TERCERCASO" << std::endl;
     return true;
 
   }
   if (tabla_pagina->cantidad_marcos_disponibles > 0) {
+
     aux->Nmp = tabla_pagina->marco_actual;
     aux->V = 1;
     aux->R = 1;
@@ -139,6 +151,7 @@ bool TLB::tercer_caso(int nro_pagina) {
     entradas[lru_tlb].V = 1;
     entradas[lru_tlb].R = 1;
     entradas[lru_tlb].Npv = nro_pagina;
+    std::cout << "FUNCION TERCERCASO" << std::endl;
     return true;
   }
   // se busca una entrada que tenga bit valido 1 para quitarle el marco de pagina
@@ -160,12 +173,14 @@ bool TLB::tercer_caso(int nro_pagina) {
 
   tabla_pagina->entrada[lru_tp].V = 0;
   tabla_pagina->entrada[lru_tp].R = 1;
+  std::cout << "FUNCION TERCERCASO" << std::endl;
   return true ;
 
 //}
 
 // no deberia nunca retonar falso
-return false;
+  std::cout << "RETORNA FALSO" << std::endl;
+  return false;
 }
 
 int TLB::circular() {

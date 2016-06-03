@@ -6,7 +6,6 @@
 #include "Entrada.h"
 
 #define ENTRADAS_TLB 4
-#define ITERACIONES 10
 #define INSTRUCCION 0
 #define DATO 1
 #define TAMANIO_DIRECCION_VIRTUAL_EN_BITS 32

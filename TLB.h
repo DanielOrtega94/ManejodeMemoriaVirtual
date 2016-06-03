@@ -26,6 +26,9 @@ public:
   EntradaTLB *entradas;
   int posicion_actual;
 
+  //contador para fallos de TLB
+  int fallos;
+
   // cantidad de entradas que contendra la tabla de pagina
   //int entradas_tabla_de_pagina;
 
