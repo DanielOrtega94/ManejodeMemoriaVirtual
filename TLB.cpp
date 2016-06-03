@@ -12,7 +12,7 @@ TLB ::TLB(int  entradas_tp)
 {
   //entradas_tabla_de_pagina=entradas_tp;
   posicion_actual = 0;
-  contador = 0;
+  //contador = 0;
   entradas = new EntradaTLB[ENTRADAS_TLB];
   int j = 0;
   for (j = 0; j < ENTRADAS_TLB; j++)

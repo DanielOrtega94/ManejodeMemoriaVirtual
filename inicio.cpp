@@ -131,7 +131,7 @@ int main(int argc, char const *argv[])
 		// TODO: implementar  las funciones
 		if (caracter_leido[0] == 'i')
 		{
-			
+
 			printf("Se leyó una instrucción\n");
 				TLB_instrucciones.LRU(direccion_leida);
 		}
@@ -145,7 +145,7 @@ int main(int argc, char const *argv[])
 		{
 			// TLB_datos(get_pagina_virtual(direccion_leida));
 			printf("Se leyó un store\n");
-			TLB_datosLRU(direccion_leida);
+			TLB_datos.LRU(direccion_leida);
 		}
 		else
 		{
