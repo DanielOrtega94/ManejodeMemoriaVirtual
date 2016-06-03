@@ -133,7 +133,7 @@ int main(int argc, char const *argv[])
 		{
 
 			printf("Se leyó una instrucción\n");
-				TLB_instrucciones.LRU(direccion_leida);
+			TLB_instrucciones.LRU(direccion_leida);
 		}
 		else if (caracter_leido[0] == 'l')
 		{
@@ -154,6 +154,8 @@ int main(int argc, char const *argv[])
 		}
 	}
 
+  cout<< "fallos: TLB:  datos:" << TLB_datos.contador_de_fallos  << endl << "instrucciones: " << TLB_instrucciones.contador_de_fallos << endl;
+  cout <<" fallos Tabla Pagina: " << tabla_de_pagina->contador_de_fallos << endl;
 
 	return 0;
 }

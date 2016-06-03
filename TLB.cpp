@@ -12,7 +12,7 @@ TLB ::TLB(int  entradas_tp)
 {
   //entradas_tabla_de_pagina=entradas_tp;
   posicion_actual = 0;
-  //contador = 0;
+  contador_de_fallos = 0;
   entradas = new EntradaTLB[ENTRADAS_TLB];
   int j = 0;
   for (j = 0; j < ENTRADAS_TLB; j++)
@@ -41,7 +41,7 @@ int TLB ::LRU(int direccion_virtual)
 
   return 0;
 }
-
+//no genera fallos de TLB ni Tabla de Pagina
 bool TLB::primer_caso(int nro_pagina) {
   EntradaTP* aux = tabla_pagina->get_entrada(nro_pagina);
   for (int i = 0; i < ENTRADAS_TLB; i++) {
@@ -60,13 +60,12 @@ bool TLB::primer_caso(int nro_pagina) {
   return false;
 }
 
-
 bool TLB::segundo_caso(int nro_pagina) {
 
 
   for (int i = 0; i < ENTRADAS_TLB; i++) {
     if (entradas[i].V == 0) {
-
+      contador_de_fallos++;
       EntradaTP* aux = tabla_pagina->get_entrada(nro_pagina);
 
 
@@ -80,12 +79,14 @@ bool TLB::segundo_caso(int nro_pagina) {
         entradas[i].R = 1;
         entradas[i].Npv = nro_pagina;
         std::cout << "FUNCION SEGUNDOCASO" << std::endl;
+
         return true ;
       }
 
-
+//
       if (aux->V == 0) {
 
+        tabla_pagina->contador_de_fallos++;
         std::cout << "segundo caso, V = 0 en tabla de pagina" << std::endl;
         if (tabla_pagina->cantidad_marcos_disponibles != 0) {
           std::cout << "quedan marcos disponibles" << std::endl;
@@ -123,7 +124,9 @@ bool TLB::segundo_caso(int nro_pagina) {
 
 bool TLB::tercer_caso(int nro_pagina) {
 
+  	contador_de_fallos++;
 // no quedan entradas desocupadas en la TLB
+  contador_de_fallos++;
   EntradaTP* aux = tabla_pagina->get_entrada(nro_pagina);
   //solamente para q entre
   //i, lo debemos cambiar por un puntero que recorra cirulamente la tlb
@@ -142,8 +145,8 @@ bool TLB::tercer_caso(int nro_pagina) {
     return true;
 
   }
-  if (tabla_pagina->cantidad_marcos_disponibles > 0) {
-
+  tabla_pagina->contador_de_fallos++;
+  if(tabla_pagina->cantidad_marcos_disponibles > 0) {
     aux->Nmp = tabla_pagina->marco_actual;
     aux->V = 1;
     aux->R = 1;

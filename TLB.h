@@ -5,7 +5,6 @@
 #include <cstdlib>
 #include <iostream>
 #include "Entrada.h"
-#include "Tabla.h"
 #include "EntradaTLB.h"
 #include "TablaPagina.h"
 #include "EntradaTP.h"
@@ -15,7 +14,7 @@
 extern unsigned int bits_offset;
 extern unsigned int get_pagina_virtual(unsigned int direccion_virtual);
 
-class TLB : public Tabla {
+class TLB {
 
 public:
 
@@ -24,10 +23,11 @@ public:
 
   // PPuntero a un arreglo de EntradasTLB
   EntradaTLB *entradas;
+
   int posicion_actual;
 
   //contador para fallos de TLB
-  int fallos;
+  int contador_de_fallos;
 
   // cantidad de entradas que contendra la tabla de pagina
   //int entradas_tabla_de_pagina;
