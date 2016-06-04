@@ -1,300 +1,188 @@
+#!usr/bin/ruby
 
+load 'EntradaTLB.rb'
+load 'TablaPagina.rb'
 
-extern unsigned int bits_offset;
-extern unsigned int get_pagina_virtual(unsigned int direccion_virtual);
+ENTRADAS_TLB = 4
+SUCCESS = 1
+FAILURE = 0
+
+bits_offset = 0
+def get_pagina_virtual(direccion_virtual)
+	bits_offset = 0
+end
 
 class TLB
-{
 
-public:
-
-// Puntero a tabla de pagina que se crea en el main
-	TablaPagina *tabla_pagina;
-
-	// PPuntero a un arreglo de EntradasTLB
-	EntradaTLB *entradas;
-
-	int posicion_actual;
-
-	//contador para fallos de TLB
-	int contador_de_fallos;
-
-	// cantidad de entradas que contendra la tabla de pagina
-	//int entradas_tabla_de_pagina;
-
-//construcctor donde recibe las entradas de tabla de pagina
-	TLB(int entradas_tablas_de_pagina);
-
-	//
-	int LRU(int direccion_virtual);
-
-	// retorna un puntero al a entrada en la posición i-esma
-	EntradaTLB* at(int posicion);
-
-	void buscar_direccion(int npv);
-
-// referido al primer caso, sin necesidad de entrar a LRU
-	bool primer_caso(int nro);
-//va a buscar entradas con V=0
-	bool segundo_caso(int nro);
-	bool tercer_caso(int nro);
-	int circular();
-	void buscar_npv(unsigned int direccion_virtual);
-	void set_tp(TablaPagina *tabla);
-
-#include <iostream>
-#include "TLB.h"
-#define ENTRADAS_TLB 4
-#define SUCCESS 1
-
-
-/*
-No se dara segunda oportunidad al quitar un marco en la tabla de pagina
-*/
-
-TLB ::TLB(int  entradas_tp)
-{
-	//entradas_tabla_de_pagina=entradas_tp;
-	posicion_actual = 0;
-	contador_de_fallos = 0;
-	entradas = new EntradaTLB[ENTRADAS_TLB];
-	int j = 0;
-
-	for(j = 0; j < ENTRADAS_TLB; j++)
-	{
-		entradas[j] = EntradaTLB();
-	}
-
-
-}
-
-
-int TLB ::LRU(int direccion_virtual)
-{
-
-
-	int nro_pagina = get_pagina_virtual(direccion_virtual);
-
-//Caso A
-	//diciendo q fue exitoso
-	if(primer_caso(nro_pagina))
-	{
-		return SUCCESS;
-	}
-	else if(segundo_caso(nro_pagina))
-	{
-		return SUCCESS;
-	}
-	else if(tercer_caso(nro_pagina))
-	{
-		return SUCCESS;
-	}
-
-//Caso C
-//Debemos reemplazar un entrada de la Tp la entradas menos reciente
-//debemos reemplazar en tablapagina
-
-
-
-	return 0;
-}
-//no genera fallos de TLB ni Tabla de Pagina
-bool TLB::primer_caso(int nro_pagina)
-{
-	EntradaTP* aux = tabla_pagina->get_entrada(nro_pagina);
-
-	for(int i = 0; i < ENTRADAS_TLB; i++)
-	{
-
-		if(nro_pagina == entradas[i].Npv && entradas[i].V == 1)
-		{
-
-			std::cout << "primer caso, V = 1 y npv = en tabla de pagina" << std::endl;
-			entradas[i].set_R(1);
-
-			aux->R = 1;
-			aux->V = 1;
-			std::cout << "FUNCION PRIMERCASO" << std::endl;
-			return true;
-		}
-	}
-
-	return false;
-}
-
-bool TLB::segundo_caso(int nro_pagina)
-{
-
-
-	for(int i = 0; i < ENTRADAS_TLB; i++)
-	{
-		if(entradas[i].V == 0)
-		{
-			contador_de_fallos++;
-			EntradaTP* aux = tabla_pagina->get_entrada(nro_pagina);
-
-
-// caso cuando v=1,
-			if(aux->V == 1)
-			{
-
-				std::cout << "segundo caso, V = 1 en tabla de pagina" << std::endl;
-				entradas[i].Nmp = aux->Nmp;
-				aux->set_R(1);
-				entradas[i].V = 1;
-				entradas[i].R = 1;
-				entradas[i].Npv = nro_pagina;
-				std::cout << "FUNCION SEGUNDOCASO" << std::endl;
-
-				return true ;
-			}
-
-//
-			if(aux->V == 0)
-			{
-
-				tabla_pagina->contador_de_fallos++;
-				std::cout << "segundo caso, V = 0 en tabla de pagina" << std::endl;
-
-				if(tabla_pagina->cantidad_marcos_disponibles != 0)
-				{
-					std::cout << "quedan marcos disponibles" << std::endl;
-					tabla_pagina->cantidad_marcos_disponibles--;
-
-					// Se actualiza la entrada en la tabla de pagina
-					aux->Nmp = (tabla_pagina->marco_actual) % tabla_pagina->tamano;
-					aux->V = 1;
-					aux->R = 1;
-					// Se actualiza la entrada en la entrada libre de la TLB
-					entradas[i].Nmp = aux->Nmp;
-					entradas[i].V = 1;
-					entradas[i].R = 1;
-					entradas[i].Npv = nro_pagina;
-					//se cambia el puntero de la posicion actual
-					tabla_pagina->marco_actual++;
-					std::cout << "FUNCION SEGUNDOCASO" << std::endl;
-					return true ;
-
-				}
-				else
-				{
-
-					//falta impplementer caso
-					// Esta wea no existe!! :D
-					std::cout << "NO quedan marcos disponibles" << std::endl;
-					std::cout << "FUNCION SEGUNDOCASO" << std::endl; // este no deberia suceder
-					return true;
-				}
-			}
-
-		}
-	}
-
-	return false;
-}
-
-bool TLB::tercer_caso(int nro_pagina)
-{
-
-	contador_de_fallos++;
-// no quedan entradas desocupadas en la TLB
-	contador_de_fallos++;
-	EntradaTP* aux = tabla_pagina->get_entrada(nro_pagina);
-	//solamente para q entre
-	//i, lo debemos cambiar por un puntero que recorra cirulamente la tlb
-	int lru_tlb = circular();
-	int lru_tp = (tabla_pagina->puntero_LRU) % tabla_pagina->tamano;
-	//caso Npv= y entradaTP.V=1
-
-	if(aux->V == 1 /*&& aux->R==0*/)    // tabla de pagina tiene marco de pagina
-	{
-
-		aux->R = 1;
-		entradas[lru_tlb].Nmp = aux->Nmp;
-		entradas[lru_tlb].V = 1;
-		entradas[lru_tlb].R = 1;
-		entradas[lru_tlb].Npv = nro_pagina;
-		std::cout << "FUNCION TERCERCASO" << std::endl;
-		return true;
-
-	}
-
-	tabla_pagina->contador_de_fallos++;
-
-	if(tabla_pagina->cantidad_marcos_disponibles > 0)
-	{
-		aux->Nmp = tabla_pagina->marco_actual;
-		aux->V = 1;
-		aux->R = 1;
-		entradas[lru_tlb].Nmp = aux->Nmp;
-		entradas[lru_tlb].V = 1;
-		entradas[lru_tlb].R = 1;
-		entradas[lru_tlb].Npv = nro_pagina;
-		std::cout << "FUNCION TERCERCASO" << std::endl;
-		return true;
-	}
-
-	// se busca una entrada que tenga bit valido 1 para quitarle el marco de pagina
-	while(tabla_pagina->entrada[lru_tp].V == 0)
-	{
-		lru_tp = tabla_pagina->circular_LRU();
-	}
-
-	// caso V=1 y R=1
-	//invalidamos entraba en tabla de pagina
-// if (aux->V == 0 /*&& aux->R == 1*/) {
-	aux->Nmp = tabla_pagina->entrada[lru_tp].Nmp;
-	aux->V = 1;
-	aux->R = 1;
-
-	entradas[lru_tlb].Nmp = aux->Nmp;
-	entradas[lru_tlb].V = 1;
-	entradas[lru_tlb].R = 1;
-	entradas[lru_tlb].Npv = nro_pagina;
-
-	tabla_pagina->entrada[lru_tp].V = 0;
-	tabla_pagina->entrada[lru_tp].R = 1;
-	std::cout << "FUNCION TERCERCASO" << std::endl;
-	return true ;
-
-//}
-
-// no deberia nunca retonar falso
-	std::cout << "RETORNA FALSO" << std::endl;
-	return false;
-}
-
-int TLB::circular()
-{
-	return (posicion_actual++) % 4; // 4 entradas en la TLB
-}
-
-
-
-EntradaTLB* TLB ::at(int posicion)
-{
-
-
-	return 0;
-}
-
-
-void TLB ::buscar_direccion(int npv)
-{
-
-}
-
-
-void TLB ::set_tp(TablaPagina *tabla)
-{
-
-	tabla_pagina = tabla;
-
-}
-
-void TLB ::buscar_npv(unsigned int direccion_virtual)
-{
-}
-};
-
-#endif
+	def initialize(entradas_tp)
+		@posicion_actual = 0
+		@contador_de_fallos = 0
+		@entradas = Array.new(ENTRADAS_TLB, EntradaTLB.new)
+	end
+
+	def LRU(direccion_virtual)
+		nro_pagina = get_pagina_virtual(direccion_virtual)
+
+		#Caso A
+		if primer_caso(nro_pagina)
+			return SUCCESS
+		elsif segundo_caso(nro_pagina)
+			return SUCCESS
+		elsif tercer_caso(nro_pagina)
+			return SUCCESS
+		end
+		return FAILURE
+	end
+
+	# no genera fallos de TLB ni Tabla de Pagina
+	def primer_caso(nro_pagina)
+		aux = @tabla_pagina.get_entrada(nro_pagina)
+
+		# TODO
+		for entrada_tlb in @entradas
+
+			if nro_pagina == entrada_tlb.npv && entrada_tlb.v == 1
+				puts "primer caso, V = 1 y npv = en tabla de pagina"
+				entrada_tlb.set_R(1)
+				aux.set_R(1)
+				aux.set_V(1)
+				puts "FUNCION PRIMER CASO"
+				return true
+			end
+		end
+
+		return false
+	end
+
+	def segundo_caso(nro_pagina)
+		# TODO
+		for entrada_tlb in @entradas
+
+			if entrada_tlb.v == 0
+				@contador_de_fallos += 1
+				aux = @tabla_pagina.get_entrada(nro_pagina)
+
+				# caso cuando v=1,
+				if aux.v == 1
+					puts "segundo caso, V = 1 en tabla de pagina"
+					entrada_tlb[i].set_Nmp(aux.nmp)
+					aux.set_R(1)
+					entrada_tlb.set_V(1)
+					entrada_tlb.set_R(1)
+					entrada_tlb.set_Npv(nro_pagina)
+					puts "FUNCION SEGUNDO CASO"
+					return true
+				end
+
+				if aux.v == 0
+					# TODO
+					@tabla_pagina.incrementar_fallos()
+					puts "segundo caso, V = 0 en tabla de pagina"
+
+					if tabla_pagina.cantidad_marcos_disponibles != 0
+						puts "quedan marcos disponibles"
+						# TODO
+						@tabla_pagina.decrementar_marcos_disponibles()
+
+						# Se actualiza la entrada en la tabla de pagina
+						aux.set_Nmp((tabla_pagina.marco_actual) % tabla_pagina.tamano)
+						aux.set_V(1)
+						aux.set_R(1)
+
+						# Se actualiza la entrada en la entrada libre de la TLB
+						entrada_tlb.set_Nmp(aux.nmp)
+						entrada_tlb.set_V(1)
+						entrada_tlb.set_R(1)
+						entrada_tlb.set_Npv(nro_pagina)
+
+						# se cambia el puntero de la posicion actual
+						@tabla_pagina.incrementar_marco_actual()
+						puts "FUNCION SEGUNDO CASO"
+						return true
+					end
+					else
+						# falta impplementer caso
+						# Esta wea no existe!! :D
+						puts "NO quedan marcos disponibles"
+						puts "FUNCION SEGUNDO CASO" # este no deberia suceder
+						return true
+					end
+				end
+			end
+		end
+		#return false
+	end
+
+	def tercer_caso(nro_pagina)
+		@contador_de_fallos += 1
+		# no quedan entradas desocupadas en la TLB
+		aux = @tabla_pagina.get_entrada(nro_pagina)
+		# solamente para q entre
+		# i, lo debemos cambiar por un puntero que recorra cirulamente la tlb
+		lru_tlb = circular()
+		lru_tp = (tabla_pagina.puntero_LRU) % tabla_pagina.tamano
+		# caso Npv= y entradaTP.V=1
+
+		if aux.v == 1 # && aux.R==0 # tabla de pagina tiene marco de pagina
+
+			aux.set_R(1)
+			@entradas[lru_tlb].set_Nmp(aux.nmp)
+			@entradas[lru_tlb].set_V(1)
+			@entradas[lru_tlb].set_R(1)
+			@entradas[lru_tlb].set_Npv(nro_pagina)
+			puts "FUNCION TERCER CASO"
+			return true
+
+		end
+
+		@tabla_pagina.contador_de_fallos += 1
+
+		if @tabla_pagina.cantidad_marcos_disponibles > 0
+			aux.set_Nmp(tabla_pagina.marco_actual)
+			aux.set_V(1)
+			aux.set_R(1)
+			@entradas[lru_tlb].set_Nmp(aux.nmp)
+			@entradas[lru_tlb].set_V(1)
+			@entradas[lru_tlb].set_R(1)
+			@entradas[lru_tlb].set_Npv(nro_pagina)
+			puts "FUNCION TERCER CASO"
+			return true
+		end
+
+		# se busca una entrada que tenga bit valido 1 para quitarle el marco de pagina
+		while @tabla_pagina.entrada[lru_tp].v == 0
+			lru_tp = @tabla_pagina.circular_LRU()
+		end
+
+		# caso V=1 y R=1
+		#invalidamos entraba en tabla de pagina
+		# if (aux.V == 0 /*&& aux.R == 1*/) {
+		aux.set_Nmp(@tabla_pagina.entrada[lru_tp].nmp)
+		aux.set_V(1)
+		aux.set_R(1)
+
+		@entradas[lru_tlb].set_Nmp(aux.nmp)
+		@entradas[lru_tlb].set_V(1)
+		@entradas[lru_tlb].set_R(1)
+		@entradas[lru_tlb].set_Npv(nro_pagina)
+
+		@tabla_pagina.entrada[lru_tp].set_V(0)
+		@tabla_pagina.entrada[lru_tp].set_R(1)
+		puts "FUNCION TERCER CASO"
+		return true
+
+
+		# no deberia nunca retonar falso
+		puts "RETORNA FALSO"
+		return false
+	end
+
+	def set_tp(tabla)
+		@tabla_pagina = tabla
+	end
+
+	def circular
+		@posicion_actual += 1
+		return @posicion_actual % ENTRADAS_TLB
+	end
+$end
