@@ -9,7 +9,6 @@
 #include "Tabla.h"
 
 #define ENTRADAS_TLB 4
-//#define ITERACIONES 100000
 #define INSTRUCCION 0
 #define DATO 1
 #define TAMANIO_DIRECCION_VIRTUAL_EN_BITS 32
@@ -151,7 +150,9 @@ int main(int argc, char const *argv[])
 		}
 	}
 
-  // EL TOTAL DE ACA ABAJO DEBIERA SER IGUAL AL TOTAL DE ACCESOS A LA TLB, ES DECIR IGUAL A LA CANTIDAD DE ITERACIONES
+fprintf(archivo_salida,"Cantidad de memoria física %d MB\n",cantidad_memoria_fisica_en_MB);
+fprintf(archivo_salida,"Tamaño de página: %d KB\n",tamanio_pagina_en_KB);
+fprintf(archivo_salida,"Fallos en TLB de Datos: %d de un total de %d\n",TLB_datos.contador_de_fallos,contador_lineas_archivo );
 fprintf(archivo_salida,"Fallos en TLB de Datos: %d de un total de %d\n",TLB_datos.contador_de_fallos,contador_lineas_archivo );
 fprintf(archivo_salida,"Tasa de fallos en TLB de datos: %f %%\n" ,100*(TLB_datos.contador_de_fallos/(float)contador_lineas_archivo) );
 fprintf(archivo_salida,"Fallos en TLB de Instrucciones: %d de un total de %d \n", TLB_instrucciones.contador_de_fallos,contador_lineas_archivo );
