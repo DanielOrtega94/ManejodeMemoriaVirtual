@@ -10,17 +10,17 @@
 class EntradaTLB : public Entrada
 {
 public:
-  unsigned int V;
-  unsigned int R;
-  unsigned int Npv;
-  unsigned int Nmp;
+    unsigned int V;
+    unsigned int R;
+    unsigned int Npv;
+    unsigned int Nmp;
 
-  EntradaTLB(int nmp, int npv);
-  EntradaTLB();
-  void set_V(int v);
-  void set_Npv(unsigned int v);
-  void set_Nmp(unsigned int v);
-  void set_R(int  v);
+    EntradaTLB(int nmp, int npv);
+    EntradaTLB();
+    void set_V(int v);
+    void set_Npv(unsigned int v);
+    void set_Nmp(unsigned int v);
+    void set_R(int  v);
 };
 
 #endif

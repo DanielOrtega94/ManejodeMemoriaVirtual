@@ -31,137 +31,140 @@ int contador_lineas_archivo=0;
 
 unsigned long long int calcular_marcos_de_pagina()
 {
-	return (cantidad_memoria_fisica_en_MB / tamanio_pagina_en_KB) * (1 << 10); // se multiplica por 2^10 para compensar la diferencia de unidades
+    return (cantidad_memoria_fisica_en_MB / tamanio_pagina_en_KB) * (1 << 10); // se multiplica por 2^10 para compensar la diferencia de unidades
 }
 
 unsigned int calcular_bits_offset()
 {
-	int retorno = 0;
-	int aux = tamanio_pagina_en_KB;
-	while (aux != 1)
-	{
-		aux /= 2;
-		retorno++;
-	}
-	return retorno + 10; // mas diez porque está en KB
+    int retorno = 0;
+    int aux = tamanio_pagina_en_KB;
+    while (aux != 1)
+    {
+        aux /= 2;
+        retorno++;
+    }
+    return retorno + 10; // mas diez porque está en KB
 }
 
 unsigned int calcular_bits_marco_pagina()
 {
-	int retorno = 0;
-	int aux = cantidad_marcos_de_pagina;
-	while (aux != 1)
-	{
-		aux /= 2;
-		retorno++;
-	}
-	return retorno;
+    int retorno = 0;
+    int aux = cantidad_marcos_de_pagina;
+    while (aux != 1)
+    {
+        aux /= 2;
+        retorno++;
+    }
+    return retorno;
 }
 
 unsigned int get_offset(unsigned int direccion_virtual)
 {
-	return (~(PUROS_UNOS << bits_offset)) & direccion_virtual;
+    return (~(PUROS_UNOS << bits_offset)) & direccion_virtual;
 }
 
 unsigned int get_pagina_virtual(unsigned int direccion_virtual)
 {
-	return direccion_virtual >> bits_offset;
+    return direccion_virtual >> bits_offset;
 }
 
 int main(int argc, char const *argv[])
 {
 
-	unsigned char caracter_leido[2] = {'\0', '\0'}; // ocupo string en vez de char para que no lea whitespace
-	unsigned int direccion_leida = 0x0;
+    unsigned char caracter_leido[2] = {'\0', '\0'}; // ocupo string en vez de char para que no lea whitespace
+    unsigned int direccion_leida = 0x0;
 
-	FILE* archivo_trace = fopen(argv[1], "r");
-	FILE* archivo_salida = fopen(argv[2], "w");
-	if (archivo_trace == NULL) {
-		perror("Error: archivo trace");
-		exit(1);
-	}
-	if (archivo_salida == NULL) {
-		perror("Error: archivo salida");
-		exit(1);
-	}
-	printf("Ingrese la cantidad de memoria física (en MB): ");
-	scanf("%d", &cantidad_memoria_fisica_en_MB);
-	printf("Ingrese el tamaño de página (en KB): ");
-	scanf("%d", &tamanio_pagina_en_KB);
+    FILE* archivo_trace = fopen(argv[1], "r");
+    FILE* archivo_salida = fopen(argv[2], "w");
+    if (archivo_trace == NULL)
+    {
+        perror("Error: archivo trace");
+        exit(1);
+    }
+    if (archivo_salida == NULL)
+    {
+        perror("Error: archivo salida");
+        exit(1);
+    }
+    printf("Ingrese la cantidad de memoria física (en MB): ");
+    scanf("%d", &cantidad_memoria_fisica_en_MB);
+    printf("Ingrese el tamaño de página (en KB): ");
+    scanf("%d", &tamanio_pagina_en_KB);
 
-	cantidad_marcos_de_pagina = calcular_marcos_de_pagina();
-	bits_offset = calcular_bits_offset();
-	bits_npv = TAMANIO_DIRECCION_VIRTUAL_EN_BITS - bits_offset;
-	bits_mp = calcular_bits_marco_pagina();
-	entradas_tabla_de_pagina = 1 << (bits_npv);
+    cantidad_marcos_de_pagina = calcular_marcos_de_pagina();
+    bits_offset = calcular_bits_offset();
+    bits_npv = TAMANIO_DIRECCION_VIRTUAL_EN_BITS - bits_offset;
+    bits_mp = calcular_bits_marco_pagina();
+    entradas_tabla_de_pagina = 1 << (bits_npv);
 
-	// crea los objetos necesarios para emular la tarea
-	TLB TLB_instrucciones(entradas_tabla_de_pagina);
-	TLB TLB_datos(entradas_tabla_de_pagina);
-	TablaPagina* tabla_de_pagina = new TablaPagina(entradas_tabla_de_pagina, cantidad_marcos_de_pagina);
-	//marcos libres estara en 1 si esta disponible y 0 si no lo esta
-	TLB_instrucciones.set_tp(tabla_de_pagina);
-	TLB_datos.set_tp(tabla_de_pagina);
+    // crea los objetos necesarios para emular la tarea
+    TLB TLB_instrucciones(entradas_tabla_de_pagina);
+    TLB TLB_datos(entradas_tabla_de_pagina);
+    TablaPagina* tabla_de_pagina = new TablaPagina(entradas_tabla_de_pagina, cantidad_marcos_de_pagina);
+    //marcos libres estara en 1 si esta disponible y 0 si no lo esta
+    TLB_instrucciones.set_tp(tabla_de_pagina);
+    TLB_datos.set_tp(tabla_de_pagina);
 //seteamos todos los marcos de pagina como disponible en un principio
 
 
-	printf("Tamaño entrada tlb: %lu\n", sizeof(EntradaTLB));
-	printf("Tamaño entrada tp: %lu\n", sizeof(EntradaTP));
+    printf("Tamaño entrada tlb: %lu\n", sizeof(EntradaTLB));
+    printf("Tamaño entrada tp: %lu\n", sizeof(EntradaTP));
 
-	printf("Memoria física en MB: %u\n", cantidad_memoria_fisica_en_MB);
-	printf("Tamaño de página en KB: %u\n", tamanio_pagina_en_KB);
-	printf("Entradas de la tabla de página (cantidad de páginas virtuales): %u\n", entradas_tabla_de_pagina);
-	printf("Cantidad de marcos de página: %u\n", cantidad_marcos_de_pagina);
-	printf("Número de marcos de página: %u\n", bits_npv);
-	printf("Bits para offset: %u\n", bits_offset);
-	printf("Bits para número de página virtual: %u\n", bits_npv);
-	printf("Bits para número de marco de página: %u\n", bits_mp);
+    printf("Memoria física en MB: %u\n", cantidad_memoria_fisica_en_MB);
+    printf("Tamaño de página en KB: %u\n", tamanio_pagina_en_KB);
+    printf("Entradas de la tabla de página (cantidad de páginas virtuales): %u\n", entradas_tabla_de_pagina);
+    printf("Cantidad de marcos de página: %u\n", cantidad_marcos_de_pagina);
+    printf("Número de marcos de página: %u\n", bits_npv);
+    printf("Bits para offset: %u\n", bits_offset);
+    printf("Bits para número de página virtual: %u\n", bits_npv);
+    printf("Bits para número de marco de página: %u\n", bits_mp);
 
-  while (!feof(archivo_trace)){
-    contador_lineas_archivo++;
-		fscanf(archivo_trace, "%s", caracter_leido);
-		fscanf(archivo_trace, "%x", &direccion_leida);
+    while (!feof(archivo_trace))
+    {
+        contador_lineas_archivo++;
+        fscanf(archivo_trace, "%s", caracter_leido);
+        fscanf(archivo_trace, "%x", &direccion_leida);
 
-		//printf("%s ", caracter_leido);
-		//printf("%x\n", direccion_leida);
-		//printf("offset: %x\n", get_offset(direccion_leida));
-		//printf("pagina virtual: %x\n", get_pagina_virtual(direccion_leida));
-		//ejecuccion principal del programa
-		// TODO: implementar  las funciones
-		if (caracter_leido[0] == 'i')
-		{
-      //printf("Se leyó una instrucción\n");
-			TLB_instrucciones.LRU(direccion_leida);
-		}
-		else if (caracter_leido[0] == 'l')
-		{
-			//printf("Se leyó un load\n");
-			TLB_datos.LRU(direccion_leida);
-		}
-		else if (caracter_leido[0] == 's')
-		{
-			//printf("Se leyó un store\n");
-			TLB_datos.LRU(direccion_leida);
-		}
-		else
-		{
-			//printf("Algo terrible sucedió! Abandonen todas las esperanzas");
-			exit(EXIT_FAILURE);
-		}
-	}
+        //printf("%s ", caracter_leido);
+        //printf("%x\n", direccion_leida);
+        //printf("offset: %x\n", get_offset(direccion_leida));
+        //printf("pagina virtual: %x\n", get_pagina_virtual(direccion_leida));
+        //ejecuccion principal del programa
+        // TODO: implementar  las funciones
+        if (caracter_leido[0] == 'i')
+        {
+            //printf("Se leyó una instrucción\n");
+            TLB_instrucciones.LRU(direccion_leida);
+        }
+        else if (caracter_leido[0] == 'l')
+        {
+            //printf("Se leyó un load\n");
+            TLB_datos.LRU(direccion_leida);
+        }
+        else if (caracter_leido[0] == 's')
+        {
+            //printf("Se leyó un store\n");
+            TLB_datos.LRU(direccion_leida);
+        }
+        else
+        {
+            //printf("Algo terrible sucedió! Abandonen todas las esperanzas");
+            exit(EXIT_FAILURE);
+        }
+    }
 
-fprintf(archivo_salida,"Cantidad de memoria física %d MB\n",cantidad_memoria_fisica_en_MB);
-fprintf(archivo_salida,"Tamaño de página: %d KB\n",tamanio_pagina_en_KB);
-fprintf(archivo_salida,"Fallos en TLB de Datos: %d de un total de %d\n",TLB_datos.contador_de_fallos,contador_lineas_archivo );
-fprintf(archivo_salida,"Fallos en TLB de Datos: %d de un total de %d\n",TLB_datos.contador_de_fallos,contador_lineas_archivo );
-fprintf(archivo_salida,"Tasa de fallos en TLB de datos: %f %%\n" ,100*(TLB_datos.contador_de_fallos/(float)contador_lineas_archivo) );
-fprintf(archivo_salida,"Fallos en TLB de Instrucciones: %d de un total de %d \n", TLB_instrucciones.contador_de_fallos,contador_lineas_archivo );
-fprintf(archivo_salida,"Tasa de fallos en TLB de Instrucciones: %f %%\n", 100*(TLB_instrucciones.contador_de_fallos/(float)contador_lineas_archivo));
-fprintf(archivo_salida,"Fallos en la tabla de páginas: %d de un total de %d\n", tabla_de_pagina->contador_de_fallos,contador_lineas_archivo );
-fprintf(archivo_salida,"Tasa de fallos en tabla de página: %f %%\n", 100*(tabla_de_pagina->contador_de_fallos/(float)contador_lineas_archivo));
-fprintf(archivo_salida,"Reemplazos hechos en TLB de datos: %d\n", TLB_datos.contador_de_fallos );
-fprintf(archivo_salida,"Reemplazos hecho en TLB de Instruction: %d\n", TLB_instrucciones.contador_de_fallos );
-fprintf(archivo_salida,"Reemplazos hecho en la tabla de páginas: %d\n",tabla_de_pagina->contador_de_fallos );
+    fprintf(archivo_salida,"Cantidad de memoria física %d MB\n",cantidad_memoria_fisica_en_MB);
+    fprintf(archivo_salida,"Tamaño de página: %d KB\n",tamanio_pagina_en_KB);
+    fprintf(archivo_salida,"Fallos en TLB de Datos: %d de un total de %d\n",TLB_datos.contador_de_fallos,contador_lineas_archivo );
+    fprintf(archivo_salida,"Fallos en TLB de Datos: %d de un total de %d\n",TLB_datos.contador_de_fallos,contador_lineas_archivo );
+    fprintf(archivo_salida,"Tasa de fallos en TLB de datos: %f %%\n" ,100*(TLB_datos.contador_de_fallos/(float)contador_lineas_archivo) );
+    fprintf(archivo_salida,"Fallos en TLB de Instrucciones: %d de un total de %d \n", TLB_instrucciones.contador_de_fallos,contador_lineas_archivo );
+    fprintf(archivo_salida,"Tasa de fallos en TLB de Instrucciones: %f %%\n", 100*(TLB_instrucciones.contador_de_fallos/(float)contador_lineas_archivo));
+    fprintf(archivo_salida,"Fallos en la tabla de páginas: %d de un total de %d\n", tabla_de_pagina->contador_de_fallos,contador_lineas_archivo );
+    fprintf(archivo_salida,"Tasa de fallos en tabla de página: %f %%\n", 100*(tabla_de_pagina->contador_de_fallos/(float)contador_lineas_archivo));
+    fprintf(archivo_salida,"Reemplazos hechos en TLB de datos: %d\n", TLB_datos.contador_de_fallos );
+    fprintf(archivo_salida,"Reemplazos hecho en TLB de Instruction: %d\n", TLB_instrucciones.contador_de_fallos );
+    fprintf(archivo_salida,"Reemplazos hecho en la tabla de páginas: %d\n",tabla_de_pagina->contador_de_fallos );
 
-	return 0;
+    return 0;
 }

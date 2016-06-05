@@ -15,18 +15,18 @@
 class EntradaTP : public Entrada
 {
 public:
-  unsigned int V;
-  unsigned int R;
-  unsigned int Nmp;
+    unsigned int V;
+    unsigned int R;
+    unsigned int Nmp;
 
 
-  EntradaTP();
-  EntradaTP(int nmp);
-  void set_V(int v);
-  void set_Nmp(unsigned int v);
-  void set_R(int  v);
-  //Este metodo no deberia estar aqui...
-  void set_Npv(unsigned int v);
+    EntradaTP();
+    EntradaTP(int nmp);
+    void set_V(int v);
+    void set_Nmp(unsigned int v);
+    void set_R(int  v);
+    //Este metodo no deberia estar aqui...
+    void set_Npv(unsigned int v);
 };
 
 #endif
