@@ -9,7 +9,7 @@
 #include "Tabla.h"
 
 #define ENTRADAS_TLB 4
-#define ITERACIONES 100000
+//#define ITERACIONES 100000
 #define INSTRUCCION 0
 #define DATO 1
 #define TAMANIO_DIRECCION_VIRTUAL_EN_BITS 32
@@ -28,6 +28,7 @@ unsigned int bits_mp = 0;
 unsigned int** marcos_de_pagina = NULL;
 unsigned int PUROS_UNOS = ~(0 << (TAMANIO_DIRECCION_VIRTUAL_EN_BITS - 1));
 unsigned int PUROS_CEROS = 0 << (TAMANIO_DIRECCION_VIRTUAL_EN_BITS - 1);
+int contador_lineas_archivo=0;
 
 unsigned long long int calcular_marcos_de_pagina()
 {
@@ -75,12 +76,15 @@ int main(int argc, char const *argv[])
 	unsigned int direccion_leida = 0x0;
 
 	FILE* archivo_trace = fopen(argv[1], "r");
-
+	FILE* archivo_salida = fopen(argv[2], "w");
 	if (archivo_trace == NULL) {
-		perror("Error: ");
+		perror("Error: archivo trace");
 		exit(1);
 	}
-
+	if (archivo_salida == NULL) {
+		perror("Error: archivo salida");
+		exit(1);
+	}
 	printf("Ingrese la cantidad de memoria física (en MB): ");
 	scanf("%d", &cantidad_memoria_fisica_en_MB);
 	printf("Ingrese el tamaño de página (en KB): ");
@@ -114,48 +118,49 @@ int main(int argc, char const *argv[])
 	printf("Bits para número de página virtual: %u\n", bits_npv);
 	printf("Bits para número de marco de página: %u\n", bits_mp);
 
-	//while (!feof(archivo_trace))
-	for (int i = 0; i < ITERACIONES; i++)
-	{
+  while (!feof(archivo_trace)){
+    contador_lineas_archivo++;
 		fscanf(archivo_trace, "%s", caracter_leido);
 		fscanf(archivo_trace, "%x", &direccion_leida);
-		//printf("Caracter leído: %c\n", caracter_leido);
-		printf("%s ", caracter_leido);
-		printf("%x\n", direccion_leida);
-		//printf("Dirección virtual: %x\n", direccion_leida);
 
-		printf("offset: %x\n", get_offset(direccion_leida));
-		printf("pagina virtual: %x\n", get_pagina_virtual(direccion_leida));
-
+		//printf("%s ", caracter_leido);
+		//printf("%x\n", direccion_leida);
+		//printf("offset: %x\n", get_offset(direccion_leida));
+		//printf("pagina virtual: %x\n", get_pagina_virtual(direccion_leida));
 		//ejecuccion principal del programa
 		// TODO: implementar  las funciones
 		if (caracter_leido[0] == 'i')
 		{
-
-			printf("Se leyó una instrucción\n");
+      //printf("Se leyó una instrucción\n");
 			TLB_instrucciones.LRU(direccion_leida);
 		}
 		else if (caracter_leido[0] == 'l')
 		{
-			//TLB_datos(get_pagina_virtual(direccion_leida));
-			printf("Se leyó un load\n");
+			//printf("Se leyó un load\n");
 			TLB_datos.LRU(direccion_leida);
 		}
 		else if (caracter_leido[0] == 's')
 		{
-			// TLB_datos(get_pagina_virtual(direccion_leida));
-			printf("Se leyó un store\n");
+			//printf("Se leyó un store\n");
 			TLB_datos.LRU(direccion_leida);
 		}
 		else
 		{
-			printf("Algo terrible sucedió! Abandonen todas las esperanzas");
+			//printf("Algo terrible sucedió! Abandonen todas las esperanzas");
 			exit(EXIT_FAILURE);
 		}
 	}
 
-  cout<< "fallos: TLB:  datos:" << TLB_datos.contador_de_fallos  << endl << "instrucciones: " << TLB_instrucciones.contador_de_fallos << endl;
-  cout <<" fallos Tabla Pagina: " << tabla_de_pagina->contador_de_fallos << endl;
+  // EL TOTAL DE ACA ABAJO DEBIERA SER IGUAL AL TOTAL DE ACCESOS A LA TLB, ES DECIR IGUAL A LA CANTIDAD DE ITERACIONES
+fprintf(archivo_salida,"Fallos en TLB de Datos: %d de un total de %d\n",TLB_datos.contador_de_fallos,contador_lineas_archivo );
+fprintf(archivo_salida,"Tasa de fallos en TLB de datos: %f %%\n" ,100*(TLB_datos.contador_de_fallos/(float)contador_lineas_archivo) );
+fprintf(archivo_salida,"Fallos en TLB de Instrucciones: %d de un total de %d \n", TLB_instrucciones.contador_de_fallos,contador_lineas_archivo );
+fprintf(archivo_salida,"Tasa de fallos en TLB de Instrucciones: %f %%\n", 100*(TLB_instrucciones.contador_de_fallos/(float)contador_lineas_archivo));
+fprintf(archivo_salida,"Fallos en la tabla de páginas: %d de un total de %d\n", tabla_de_pagina->contador_de_fallos,contador_lineas_archivo );
+fprintf(archivo_salida,"Tasa de fallos en tabla de página: %f %%\n", 100*(tabla_de_pagina->contador_de_fallos/(float)contador_lineas_archivo));
+fprintf(archivo_salida,"Reemplazos hechos en TLB de datos: %d\n", TLB_datos.contador_de_fallos );
+fprintf(archivo_salida,"Reemplazos hecho en TLB de Instruction: %d\n", TLB_instrucciones.contador_de_fallos );
+fprintf(archivo_salida,"Reemplazos hecho en la tabla de páginas: %d\n",tabla_de_pagina->contador_de_fallos );
 
 	return 0;
 }
